@@ -58,6 +58,7 @@ LoadingScreen::~LoadingScreen()
     delete mClickToPlayLink;
     delete mRegisterLink;
 
+    gSexyAppBase->mResourceManager->ReplaceImage("IMAGE_GAMEBORDER", NULL);
     gSexyAppBase->mResourceManager->ReplaceImage("IMAGE_LOADING_SCREEN", NULL);
     gSexyAppBase->mResourceManager->ReplaceImage("IMAGE_LOADERBAR", NULL);
     gSexyAppBase->mResourceManager->ReplaceImage("IMAGE_LOADERBARBW", NULL);
@@ -69,26 +70,27 @@ void LoadingScreen::Resize(int theX, int theY, int theWidth, int theHeight)
 
     mClickToPlayLink->Resize(
         theX + (mWidth - mClickToPlayLink->mWidth) / 2,
-        430,
+        950,
         mClickToPlayLink->mWidth,
         mClickToPlayLink->mHeight);
 
     mRegisterLink->Resize(
         theX + (mWidth - mRegisterLink->mWidth) / 2,
-        280,
+        950,
         mRegisterLink->mWidth,
         mRegisterLink->mHeight);
 }
 
 void LoadingScreen::Draw(Graphics *g)
 {
-    g->DrawImage(Sexy::IMAGE_LOADING_SCREEN, 0, 0);
+    g->DrawImage(Sexy::IMAGE_LOADING_SCREEN, 320, 60);
+    g->DrawImage(Sexy::IMAGE_GAMEBORDER, 0, 0);
 
     int barWidth = Sexy::IMAGE_LOADERBAR->mWidth * mLoadingProgress;
 
     Rect srcRect(0, 0, barWidth, Sexy::IMAGE_LOADERBAR->mHeight);
 
-    g->DrawImage(Sexy::IMAGE_LOADERBAR, 128, 349, srcRect);
+    g->DrawImage(Sexy::IMAGE_LOADERBAR, 577, 758, srcRect);
 }
 
 void LoadingScreen::Update()

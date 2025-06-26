@@ -135,8 +135,8 @@ Board::Board(CircleShootApp *theApp)
     mMenuButton->mOverRect = Rect(menuWidth, 0, menuWidth, menuHeight);
     mMenuButton->mDownRect = Rect(menuWidth * 2, 0, menuWidth, menuHeight);
 
-    mMenuButton->Resize(540, 3, menuWidth, menuHeight);
-    mContinueButton->Resize(410, 450 - mContinueButton->mHeight, 200, mContinueButton->mHeight);
+    mMenuButton->Resize(1398, 67, menuWidth, menuHeight);
+    mContinueButton->Resize(410 * 2 + 320, 450 * 2 + 60 - mContinueButton->mHeight, 200, mContinueButton->mHeight);
 
     mOverlayWidget->Resize(0, 0, CIRCLE_WINDOW_WIDTH, CIRCLE_WINDOW_HEIGHT);
 
@@ -496,89 +496,89 @@ void Board::AdvanceFreeBullet(BulletList::iterator &theBulletItr)
 
     if (mCurTreasure != NULL)
     {
-        float dx = aBullet->GetX() - mCurTreasure->x - 15;
-        float dy = aBullet->GetY() - mCurTreasure->y - 15;
-        float r = aBullet->GetRadius() + 20;
+    float dx = aBullet->GetX() - mCurTreasure->x - 15;
+    float dy = aBullet->GetY() - mCurTreasure->y - 15;
+    float r = aBullet->GetRadius() + 20;
 
-        if (dx * dx + dy * dy < r * r)
+    if (dx * dx + dy * dy < r * r)
+    {
+        ++mLevelStats.mNumGemsCleared;
+        FloatingTextHelper aFloat;
+
+        int bonus = ((mScoreTarget - mLevelBeginScore) / 600) * 100;
+
+        if (mIsEndless)
         {
-            ++mLevelStats.mNumGemsCleared;
-            FloatingTextHelper aFloat;
-
-            int bonus = ((mScoreTarget - mLevelBeginScore) / 600) * 100;
-
-            if (mIsEndless)
+            if (bonus < 200)
             {
-                if (bonus < 200)
-                {
-                    bonus = 200;
-                }
+                bonus = 200;
             }
-            else
-            {
-                if (bonus < 500)
-                {
-                    bonus = 500;
-                }
-            }
-
-            aFloat.AddText(StrFormat("BONUS +%d", bonus), Sexy::FONT_FLOAT_ID, 0xFFFF00);
-            aFloat.AddToMgr(mParticleMgr, mCurTreasure->x, mCurTreasure->y);
-            IncScore(bonus);
-
-            mApp->PlaySample(Sexy::SOUND_JEWEL_HIT);
-
-            mTreasureZoomFrame = 1;
-            mTreasureZoomX = mCurTreasure->x;
-            mTreasureZoomY = mCurTreasure->y;
-
-            for (int i = 0; i < 10; i++)
-            {
-                float vx = cosf(i * 360 / 10 * SEXY_PI / 180.0f);
-                float vy = sinf(i * 360 / 10 * SEXY_PI / 180.0f);
-                uint color = gBrightBallColors[Sexy::Rand() % 6];
-
-                mParticleMgr->AddSparkle(mCurTreasure->x + vx * 16.0f, mCurTreasure->y + vx * 16.0f, 2 * vx, 2 * vy, 5, 0, Sexy::Rand() % 5, color);
-            }
-
-            mCurTreasure = NULL;
-
-            delete aBullet;
-            theBulletItr = mBulletList.erase(theBulletItr);
-            return;
         }
+        else
+        {
+            if (bonus < 500)
+            {
+                bonus = 500;
+            }
+        }
+
+        aFloat.AddText(StrFormat("BONUS +%d", bonus), Sexy::FONT_FLOAT_ID, 0xFFFF00);
+        aFloat.AddToMgr(mParticleMgr, mCurTreasure->x, mCurTreasure->y);
+        IncScore(bonus);
+
+        mApp->PlaySample(Sexy::SOUND_JEWEL_HIT);
+
+        mTreasureZoomFrame = 1;
+        mTreasureZoomX = mCurTreasure->x;
+        mTreasureZoomY = mCurTreasure->y;
+
+        for (int i = 0; i < 10; i++)
+        {
+            float vx = cosf(i * 360 / 10 * SEXY_PI / 180.0f);
+            float vy = sinf(i * 360 / 10 * SEXY_PI / 180.0f);
+            uint color = gBrightBallColors[Sexy::Rand() % 6];
+
+            mParticleMgr->AddSparkle(mCurTreasure->x + vx * 16.0f, mCurTreasure->y + vx * 16.0f, 2 * vx, 2 * vy, 5, 0, Sexy::Rand() % 5, color);
+        }
+
+        mCurTreasure = NULL;
+
+        delete aBullet;
+        theBulletItr = mBulletList.erase(theBulletItr);
+        return;
+    }
     }
 
     if (gCheckCollision)
     {
-        for (int i = 0; i < mNumCurves; i++)
+    for (int i = 0; i < mNumCurves; i++)
+    {
+        if (mCurveMgr[i]->CheckCollision(aBullet))
         {
-            if (mCurveMgr[i]->CheckCollision(aBullet))
-            {
-                theBulletItr = mBulletList.erase(theBulletItr);
-                return;
-            }
+            theBulletItr = mBulletList.erase(theBulletItr);
+            return;
         }
+    }
     }
 
     for (int i = 0; i < mNumCurves; i++)
     {
-        mCurveMgr[i]->CheckGapShot(aBullet);
+    mCurveMgr[i]->CheckGapShot(aBullet);
     }
 
     if (aBullet->GetX() >= 0.0f && aBullet->GetY() >= 0.0f &&
-        (aBullet->GetX() - aBullet->GetRadius()) < mWidth &&
-        (aBullet->GetY() - aBullet->GetRadius()) < mHeight)
+    (aBullet->GetX() - aBullet->GetRadius()) < mWidth &&
+    (aBullet->GetY() - aBullet->GetRadius()) < mHeight)
     {
-        ++theBulletItr;
+    ++theBulletItr;
     }
     else
     {
-        ResetInARowBonus();
-        delete aBullet;
-        theBulletItr = mBulletList.erase(theBulletItr);
+    ResetInARowBonus();
+    delete aBullet;
+    theBulletItr = mBulletList.erase(theBulletItr);
     }
-}
+    }
 
 void Board::UpdateBullets()
 {
@@ -784,7 +784,6 @@ void Board::UpdateGuide()
     float dy2 = dy;
     float dx3 = dx * 16.0f;
     float dy3 = dy * 16.0f;
-    // int dist = 50; this was probably there ???
 
     const SexyVector3 aCenter(
         (float)mGun->GetCenterX() + dy * 50.0f,
@@ -796,18 +795,18 @@ void Board::UpdateGuide()
     SexyVector3 v1(cosf(anAngle), -sinf(anAngle), 0.0f);
     float t = 10000000.0f;
 
-    Sexy::Ball *aBall = NULL;
+    Sexy::Ball* aBall = NULL;
 
     for (int i = 0; i < mNumCurves; i++)
     {
-        Sexy::Ball *anIntersectBall = mCurveMgr[i]->CheckBallIntersection(g1, v1, t);
+        Sexy::Ball* anIntersectBall = mCurveMgr[i]->CheckBallIntersection(g1, v1, t);
         if (anIntersectBall)
             aBall = anIntersectBall;
     }
 
     for (int i = 0; i < mNumCurves; i++)
     {
-        Sexy::Ball *anIntersectBall = mCurveMgr[i]->CheckBallIntersection(g2, v1, t);
+        Sexy::Ball* anIntersectBall = mCurveMgr[i]->CheckBallIntersection(g2, v1, t);
         if (anIntersectBall)
             aBall = anIntersectBall;
     }
@@ -828,15 +827,17 @@ void Board::UpdateGuide()
     mShowGuide = true;
     mRecalcGuide = false;
 
-    mGuide[0].mX = g1.x + dx3 * 0.5f;
-    mGuide[0].mY = g1.y + dy3 * 0.5f;
-    mGuide[1].mX = g2.x + dx3 * -0.5f;
-    mGuide[1].mY = g2.y + dy3 * -0.5f;
-    mGuide[2].mX = aGuide.x + dx2;
-    mGuide[2].mY = aGuide.y + dy2;
-    mGuide[3].mX = aGuide.x - dx2;
-    mGuide[3].mY = aGuide.y - dy2;
+
+    mGuide[0].mX = (g1.x + dx3 * 0.5f);
+    mGuide[0].mY = (g1.y + dy3 * 0.5f);
+    mGuide[1].mX = (g2.x + dx3 * -0.5f);
+    mGuide[1].mY = (g2.y + dy3 * -0.5f);
+    mGuide[2].mX = (aGuide.x + dx2);
+    mGuide[2].mY = (aGuide.y + dy2);
+    mGuide[3].mX = (aGuide.x - dx2);
+    mGuide[3].mY = (aGuide.y - dy2);
 }
+
 
 int GetTreasurePitch(int x)
 {
@@ -1003,8 +1004,8 @@ void Board::DrawTreasure(Graphics *g)
 {
     if (mCurTreasure != NULL)
     {
-        int x = mCurTreasure->x;
-        int y = mCurTreasure->y;
+        int x = mCurTreasure->x - 10;
+        int y = mCurTreasure->y - 10;
         int v10 = (mStateCount / 4) % 30;
 
         g->SetColorizeImages(true);
@@ -1136,7 +1137,7 @@ void Board::DrawText(Graphics *g)
             g->SetColor(Color(0xFFFF00));
             aText = "Survival";
             int aTextWidth = Sexy::FONT_DIALOG->StringWidth(aText);
-            g->DrawString(aText, 64 - aTextWidth / 2, 20);
+            g->DrawString(aText, 64 * 2 + 320 - aTextWidth / 2, 20 * 2 + 60);
 
             v19 = false;
             v20 = 0;
@@ -1148,7 +1149,7 @@ void Board::DrawText(Graphics *g)
                 g->SetColor(Color(0xFFFF00));
                 aText = "Last Life";
                 int aTextWidth = Sexy::FONT_DIALOG->StringWidth(aText);
-                g->DrawString(aText, 64 - aTextWidth / 2, 20);
+                g->DrawString(aText, 64 * 2 + 320 - aTextWidth / 2, 20 * 2 + 60);
                 v19 = false;
                 v20 = 0;
             }
@@ -1164,11 +1165,11 @@ void Board::DrawText(Graphics *g)
             }
         }
 
-        int aFrogX = 28;
+        int aFrogX = 28 * 2 + 320;
         for (int i = 0; i < v20; i++)
         {
-            g->DrawImage(Sexy::IMAGE_FROG_LIVES, aFrogX, 3);
-            aFrogX += 26;
+            g->DrawImage(Sexy::IMAGE_FROG_LIVES, aFrogX, 3 * 2 + 60);
+            aFrogX += 26 * 2;
         }
 
         if (v19)
@@ -1176,19 +1177,19 @@ void Board::DrawText(Graphics *g)
             g->SetColor(Color(0xFFFF00));
             g->SetFont(Sexy::FONT_FLOAT);
             std::string aText = Sexy::StrFormat("x%d", aLives);
-            g->DrawString(aText, aFrogX + 4, 22);
+            g->DrawString(aText, aFrogX + 10, 100);
             g->SetFont(Sexy::FONT_DIALOG);
         }
     }
 
     g->SetColor(Color(0xFFFF00));
     int aLvlWidth = Sexy::FONT_DIALOG->StringWidth(mLevelString);
-    g->DrawString(mLevelString, 200 - aLvlWidth / 2, 15);
+    g->DrawString(mLevelString, 200 * 2 + 320 - aLvlWidth / 2, 15 * 2 + 60);
 
     g->SetFont(Sexy::FONT_MONODIGIT);
     std::string aScoreTxt = Sexy::StrFormat("%d", mScoreDisplay);
     int aScoreWidth = Sexy::FONT_MONODIGIT->StringWidth(aScoreTxt);
-    g->DrawString(aScoreTxt, 360 - aScoreWidth, 17);
+    g->DrawString(aScoreTxt, 360 * 2 + 320 - aScoreWidth, 17 * 2 + 60);
     g->SetFont(Sexy::FONT_DIALOG);
     g->SetColor(Color(0xFFFF00));
 
@@ -1218,7 +1219,7 @@ void Board::DrawText(Graphics *g)
             }
 
             Rect aRect(0, 0, v13, aBarImage->mHeight);
-            g->DrawImage(aBarImage, 409, 2, aRect);
+            g->DrawImage(aBarImage, 409 * 2 + 320, 2 * 2 + 60, aRect);
         }
     }
 
@@ -1241,7 +1242,7 @@ void Board::DrawText(Graphics *g)
 
         g->SetFont(Sexy::FONT_MAIN10OUTLINE);
         g->SetColor(Color(0xFFFF00));
-        g->DrawString(aTimeText, 580, 460);
+        g->DrawString(aTimeText, 1500, 980);
     }
 }
 
@@ -1255,7 +1256,7 @@ void Board::DrawOverlay(Graphics *g)
     if (!mShowBallsDuringPause && mLives > 0)
     {
         g->SetColor(Color(0, 0, 0, 255 * mPauseFade / 100));
-        g->FillRect(0, 0, CIRCLE_WINDOW_WIDTH, CIRCLE_WINDOW_HEIGHT);
+        g->FillRect(320, 60, 1280, 960);
     }
 
     if (mDialogCount == 0)

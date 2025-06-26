@@ -32,32 +32,32 @@ AdventureScreen::AdventureScreen()
 	mPlayButton = MakeButton(1, this, "", CircleButton::CB_ClickSound, Sexy::IMAGE_ADVPLAYBUTTON, 3);
 
 	Point aDoorPoints[12] = {
-		Point(226, 300),
-		Point(296, 270),
-		Point(366, 300),
-		Point(0, 164),
-		Point(69, 159),
-		Point(120, 155),
-		Point(452, 154),
-		Point(509, 154),
-		Point(568, 154),
-		Point(220, 35),
-		Point(291, 35),
-		Point(369, 35)};
+		Point(226 * 2 + 320, 300 * 2 + 60),
+		Point(296 * 2 + 320, 270 * 2 + 60),
+		Point(366 * 2 + 320, 300 * 2 + 60),
+		Point(320, 164 * 2 + 60),
+		Point(69 * 2 + 320, 159 * 2 + 60),
+		Point(120 * 2 + 320, 155 * 2 + 60),
+		Point(452 * 2 + 320, 154 * 2 + 60),
+		Point(509 * 2 + 320, 154 * 2 + 60),
+		Point(568 * 2 + 320, 154 * 2 + 60),
+		Point(220 * 2 + 320, 35 * 2 + 60),
+		Point(291 * 2 + 320, 35 * 2 + 60),
+		Point(369 * 2 + 320, 35 * 2 + 60)};
 
 	Point aDoorPointsBounds[12] = {
-		Point(256, 361),
-		Point(327, 364),
-		Point(398, 360),
-		Point(56, 218),
-		Point(116, 201),
-		Point(167, 188),
-		Point(462, 188),
-		Point(521, 192),
-		Point(584, 196),
-		Point(248, 86),
-		Point(324, 86),
-		Point(408, 85)};
+		Point(256 * 2 + 320, 361),
+		Point(327 * 2 + 320, 364),
+		Point(398 * 2 + 320, 360),
+		Point(56 * 2 + 320, 218),
+		Point(116 * 2 + 320, 201),
+		Point(167 * 2 + 320, 188),
+		Point(462 * 2 + 320, 188),
+		Point(521 * 2 + 320, 192),
+		Point(584 * 2 + 320, 196),
+		Point(248 * 2 + 320, 86),
+		Point(324 * 2 + 320, 86),
+		Point(408 * 2 + 320, 85)};
 
 	mTemples = 0;
 	mStagger = 0;
@@ -173,8 +173,8 @@ void AdventureScreen::Resize(int theX, int theY, int theWidth, int theHeight)
 		mHighlightDoor = GetDoorAt(mWidgetManager->mLastMouseX - theX, mWidgetManager->mLastMouseY - theY);
 	}
 
-	mMainMenuButton->Resize(theX, theY + 438, mMainMenuButton->mWidth, mMainMenuButton->mHeight);
-	mPlayButton->Resize(theX + 542, theY + 441, mPlayButton->mWidth, mPlayButton->mHeight);
+	mMainMenuButton->Resize(theX * 2 + 320, theY + 438 * 2 + 60, mMainMenuButton->mWidth, mMainMenuButton->mHeight);
+	mPlayButton->Resize(theX + 542 * 2 + 320, theY + 441 * 2 + 60, mPlayButton->mWidth, mPlayButton->mHeight);
 }
 
 void AdventureScreen::AddedToManager(WidgetManager *theWidgetManager)
@@ -213,13 +213,13 @@ void AdventureScreen::Draw(Graphics *g)
 	Widget::Draw(g);
 
 	int aSkyScroll = (mUpdateCnt / 4) % IMAGE_ADVSKY->mWidth;
-	g->DrawImage(Sexy::IMAGE_ADVSKY, aSkyScroll - IMAGE_ADVSKY->mWidth, 0);
-	g->DrawImage(Sexy::IMAGE_ADVSKY, aSkyScroll, 0);
-	g->DrawImage(Sexy::IMAGE_ADVSKY, aSkyScroll + IMAGE_ADVSKY->mWidth, 0);
+	g->DrawImage(Sexy::IMAGE_ADVSKY, aSkyScroll - IMAGE_ADVSKY->mWidth, 60);
+	g->DrawImage(Sexy::IMAGE_ADVSKY, aSkyScroll, 60);
+	g->DrawImage(Sexy::IMAGE_ADVSKY, aSkyScroll + IMAGE_ADVSKY->mWidth, 60);
 
-	g->DrawImage(Sexy::IMAGE_ADVBACK, 0, 0);
-	g->DrawImage(Sexy::IMAGE_ADVTITLE, 0, 0);
-	g->DrawImage(Sexy::IMAGE_ADVHIGHSCORE, 456, 0);
+	g->DrawImage(Sexy::IMAGE_ADVBACK, 320, 60);
+	g->DrawImage(Sexy::IMAGE_ADVTITLE, 320, 60);
+	g->DrawImage(Sexy::IMAGE_ADVHIGHSCORE, 456 * 2 + 320, 0 + 60);
 
 	DrawTemple4(g);
 	g->Translate(mTempleXOffsets[2], 0);
@@ -230,7 +230,7 @@ void AdventureScreen::Draw(Graphics *g)
 	g->Translate(-mTempleXOffsets[1], 0);
 	g->Translate(mTempleXOffsets[0], 0);
 	DrawTemple1(g);
-
+	g->DrawImage(Sexy::IMAGE_GAMEBORDER, 0, 0);
 	const char *aTempleNames[4] = {
 		"TEMPLE OF ZUKULKAN",
 		"QUETZAL QUATL",
@@ -253,23 +253,23 @@ void AdventureScreen::Draw(Graphics *g)
 
 	if (mCurrentDoor >= 0)
 	{
-		g->DrawImage(Sexy::IMAGE_ADVSTAGE, 289, 382);
+		g->DrawImage(Sexy::IMAGE_ADVSTAGE, 289 * 2 + 320, 382 * 2 + 60);
 
 		g->SetColor(Color(0xFBF1B0));
 		g->SetFont(Sexy::FONT_DIALOG);
-		g->DrawString(Sexy::StrFormat("%d", mCurrentDoor + 1), 344, 396);
+		g->DrawString(Sexy::StrFormat("%d", mCurrentDoor + 1), 344 * 2 + 320, 396 * 2 + 60);
 
 		g->SetFont(Sexy::FONT_BROWNTITLE);
 		g->SetColor(Color(0xFFFFFF));
 		int aTempleTextWidth = Sexy::FONT_BROWNTITLE->StringWidth(aTempleNames[mCurrentDoor / 3]);
-		g->DrawString(aTempleNames[mCurrentDoor / 3], 326 - aTempleTextWidth / 2, 422);
+		g->DrawString(aTempleNames[mCurrentDoor / 3], 326 * 2 + 320 - aTempleTextWidth / 2, 422 * 2 + 60);
 
 		g->SetFont(Sexy::FONT_MAIN10OUTLINE2);
 		std::string aStageName = aStageNames[mCurrentDoor];
 		int aStageTextWidth = Sexy::FONT_MAIN10OUTLINE2->StringWidth(aStageName);
 
 		g->SetColor(Color(0xFFEA01));
-		g->DrawString(aStageName, 326 - aStageTextWidth / 2, 456);
+		g->DrawString(aStageName, 326 * 2 + 320 - aStageTextWidth / 2, 456 * 2 + 60);
 	}
 
 	g->Translate(-mTempleXOffsets[0], 0);
@@ -286,10 +286,10 @@ void AdventureScreen::Draw(Graphics *g)
 			 aScores++, aHighScoreItr++)
 		{
 			int aY = aScores * Sexy::FONT_MAIN8OUTLINE->GetLineSpacing() + 70;
-			aClipG.DrawString(Sexy::StrFormat("%d", aHighScoreItr->mScore), 575, aY);
+			aClipG.DrawString(Sexy::StrFormat("%d", aHighScoreItr->mScore), 575 * 2 + 320, aY * 2 + 60);
 		}
 
-		aClipG.ClipRect(0, 0, 567, 480);
+		aClipG.ClipRect(320, 60, 567, 480);
 
 		aHighScoreItr = mScoreSet->begin();
 		for (int aScores = 0;
@@ -297,11 +297,11 @@ void AdventureScreen::Draw(Graphics *g)
 			 aScores++, aHighScoreItr++)
 		{
 			int aY = aScores * Sexy::FONT_MAIN8OUTLINE->GetLineSpacing() + 70;
-			aClipG.DrawString(aHighScoreItr->mName, 470, aY);
+			aClipG.DrawString(aHighScoreItr->mName, 470 * 2 + 320, aY * 2 + 60);
 		}
 	}
 
-	Rect aStageDescRect(20, 60, 150, 100);
+	Rect aStageDescRect(20 * 2 + 320, 60 * 2 + 60, 150, 100);
 	g->SetFont(Sexy::FONT_MAIN8OUTLINE);
 	g->SetColor(Color(0x28534C));
 	std::string aStageDesc = "Uncover the secret temples of Zuma!";
@@ -453,7 +453,7 @@ void AdventureScreen::DrawDoors(Graphics *g, int first, int last)
 
 void AdventureScreen::DrawTemple1(Graphics *g)
 {
-	g->DrawImage(Sexy::IMAGE_ADVTEMPLE1, 0, 188);
+	g->DrawImage(Sexy::IMAGE_ADVTEMPLE1, 320, 188 * 2 + 60);
 	DrawDoors(g, 0, 3);
 }
 
@@ -467,19 +467,19 @@ void AdventureScreen::DrawTemple2(Graphics *g)
 
 		g->SetColorizeImages(true);
 		g->SetColor(Color(255, 255, 255, 255 - aColor));
-		g->DrawImage(Sexy::IMAGE_ADVTEMPLE2V, 0, 112);
+		g->DrawImage(Sexy::IMAGE_ADVTEMPLE2V, 320, 112 * 2 + 60);
 		g->SetColor(Color(255, 255, 255, aColor));
-		g->DrawImage(Sexy::IMAGE_ADVTEMPLE2, 0, 112);
+		g->DrawImage(Sexy::IMAGE_ADVTEMPLE2, 320, 112 * 2 + 60);
 		DrawDoors(g, 3, 6);
 		g->SetColorizeImages(false);
 	}
 	else if (mMaxStage < 3)
 	{
-		g->DrawImage(Sexy::IMAGE_ADVTEMPLE2V, 0, 112);
+		g->DrawImage(Sexy::IMAGE_ADVTEMPLE2V, 320, 112 * 2 + 60);
 	}
 	else
 	{
-		g->DrawImage(Sexy::IMAGE_ADVTEMPLE2, 0, 112);
+		g->DrawImage(Sexy::IMAGE_ADVTEMPLE2, 320, 112 * 2 + 60);
 		DrawDoors(g, 3, 6);
 	}
 }
@@ -494,19 +494,19 @@ void AdventureScreen::DrawTemple3(Graphics *g)
 
 		g->SetColorizeImages(true);
 		g->SetColor(Color(255, 255, 255, 255 - aColor));
-		g->DrawImage(Sexy::IMAGE_ADVTEMPLE3V, 395, 125);
+		g->DrawImage(Sexy::IMAGE_ADVTEMPLE3V, 395 * 2 + 320, 125 * 2 + 60);
 		g->SetColor(Color(255, 255, 255, aColor));
-		g->DrawImage(Sexy::IMAGE_ADVTEMPLE3, 395, 125);
+		g->DrawImage(Sexy::IMAGE_ADVTEMPLE3, 395 * 2 + 320, 125 * 2 + 60);
 		DrawDoors(g, 6, 9);
 		g->SetColorizeImages(false);
 	}
 	else if (mMaxStage < 6)
 	{
-		g->DrawImage(Sexy::IMAGE_ADVTEMPLE3V, 395, 125);
+		g->DrawImage(Sexy::IMAGE_ADVTEMPLE3V, 395 * 2 + 320, 125 * 2 + 60);
 	}
 	else
 	{
-		g->DrawImage(Sexy::IMAGE_ADVTEMPLE3, 395, 125);
+		g->DrawImage(Sexy::IMAGE_ADVTEMPLE3, 395 * 2 + 320, 125 * 2 + 60);
 		DrawDoors(g, 6, 9);
 	}
 }
@@ -520,18 +520,18 @@ void AdventureScreen::DrawTemple4(Graphics *g)
 			int aY = 300 - mStagger;
 			int aY2 = aY * aY / 300;
 			g->Translate(mTempleXOffsets[3], aY2);
-			g->DrawImage(Sexy::IMAGE_ADVTEMPLE4, 174, 1);
+			g->DrawImage(Sexy::IMAGE_ADVTEMPLE4, 174 * 2 + 320, 1 * 2 + 60);
 			DrawDoors(g, 9, 12);
-			g->Translate(-mTempleXOffsets[3], -aY2);
+			g->Translate(-mTempleXOffsets[3], -aY2 * 2 + 60);
 		}
 
-		g->DrawImage(Sexy::IMAGE_ADVMIDDLE, 0, 72);
+		g->DrawImage(Sexy::IMAGE_ADVMIDDLE, 320, 72 * 2 + 60);
 	}
 	else if (mMaxStage >= 9)
 	{
-		g->DrawImage(Sexy::IMAGE_ADVTEMPLE4, 174, 1);
+		g->DrawImage(Sexy::IMAGE_ADVTEMPLE4, 174 * 2 + 320, 1 * 2 + 60);
 		DrawDoors(g, 9, 12);
-		g->DrawImage(Sexy::IMAGE_ADVMIDDLE, 0, 72);
+		g->DrawImage(Sexy::IMAGE_ADVMIDDLE, 320, 72 * 2 + 60);
 	}
 }
 

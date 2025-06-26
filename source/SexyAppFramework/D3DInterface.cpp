@@ -74,8 +74,8 @@ bool D3DInterface::CheckDXError(HRESULT theError, const char *theMsg)
 D3DInterface::D3DInterface()
 {
 	mHWnd = NULL;
-	mWidth = 640;
-	mHeight = 480;
+	mWidth = 1920;
+	mHeight = 1080;
 	mDD = NULL;
 	mDDSDrawSurface = NULL;
 	mZBuffer = NULL;

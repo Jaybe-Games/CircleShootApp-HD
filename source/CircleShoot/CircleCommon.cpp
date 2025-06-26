@@ -140,14 +140,14 @@ void Sexy::MirrorPoint(float &x, float &y, MirrorType theMirror)
     case MirrorType_None:
         break;
     case MirrorType_X:
-        x = 640.0f - x;
+        x = 1280.0f - x;
         break;
     case MirrorType_Y:
-        y = 480.0f - y;
+        y = 960.0f - y;
         break;
     case MirrorType_XY:
-        x = 640.0f - x;
-        y = 480.0f - y;
+        x = 1280.0f - x;
+        y = 960.0f - y;
         break;
     }
 }
@@ -159,14 +159,14 @@ void Sexy::MirrorPoint(int &x, int &y, MirrorType theMirror)
     case MirrorType_None:
         break;
     case MirrorType_X:
-        x = 640 - x;
+        x = 1280 - x;
         break;
     case MirrorType_Y:
-        y = 480 - y;
+        y = 960 - y;
         break;
     case MirrorType_XY:
-        x = 640 - x;
-        y = 480 - y;
+        x = 1280 - x;
+        y = 960 - y;
         break;
     }
 }
@@ -178,14 +178,14 @@ void Sexy::MirrorRect(int &x, int &y, int w, int h, MirrorType theMirror)
     case MirrorType_None:
         break;
     case MirrorType_X:
-        x = 640 - (x + w);
+        x = 1280 - (x + w);
         break;
     case MirrorType_Y:
-        y = 480 - (y + h);
+        y = 960 - (y + h);
         break;
     case MirrorType_XY:
-        x = 640 - (x + w);
-        y = 480 - (y + h);
+        x = 1280 - (x + w);
+        y = 960 - (y + h);
         break;
     }
 }
@@ -379,13 +379,13 @@ void Sexy::SetupDialog(Dialog *theDialog, int theMinWidth)
     }
 
     int winHeight = theDialog->GetPreferredHeight(aWinWidth);
-    int screenWidth = 640;
+    int screenWidth = 1280;
     if (winY + winHeight >= 471)
     {
         winY = 10;
     }
 
-    theDialog->Resize((screenWidth - aWinWidth) / 2, winY, aWinWidth, winHeight);
+    theDialog->Resize(1160 - aWinWidth, 300, aWinWidth, winHeight);
 
     SetupButton(theDialog->mYesButton, 3);
     SetupButton(theDialog->mNoButton, 3);

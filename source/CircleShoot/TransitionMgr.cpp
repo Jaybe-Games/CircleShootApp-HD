@@ -142,7 +142,7 @@ void TransitionMgr::DrawQuake(Graphics *g)
     if (mBoard->mPracticeMode != PracticeMode_Single)
     {
         Color c(0x000000);
-
+        
         if (!mDoTempleUp)
         {
             int anAlpha = 255 * mStateCount / 250;
@@ -158,7 +158,7 @@ void TransitionMgr::DrawQuake(Graphics *g)
         }
 
         g->SetColor(c);
-        g->FillRect(0, 0, 640, 480);
+        g->FillRect(320, 60, 1280, 960);
         mBoard->mSpriteMgr->DrawBackgroundTransition(g);
     }
     else
@@ -293,7 +293,7 @@ void TransitionMgr::DrawStageCompleteText(Graphics *g)
             return;
 
         if (mStateCount - mStageCompleteFrame < 50)
-            sg.ClipRect(0, 0, mBoard->mGun->GetCenterX(), 480);
+            sg.ClipRect(320, 60, mBoard->mGun->GetCenterX(), 1080);
     }
 
     std::string aText = "COMPLETE";
@@ -336,7 +336,7 @@ void TransitionMgr::DrawLevelFade(Graphics *g)
         return;
 
     g->SetColor(Color(0, 0, 0, mLevelFade));
-    g->FillRect(0, 0, 640, 480);
+    g->FillRect(320, 60, 1920, 1080);
 }
 
 void TransitionMgr::DrawLosing(Graphics *g)
@@ -393,15 +393,15 @@ void TransitionMgr::DrawTempleComplete(Graphics *g)
     g->SetColor(Color(0xFFFF00));
     g->SetFont(Sexy::FONT_HUGE);
 
-    mBoard->WriteCenteredLine(g, 120, "CONGRATULATIONS!");
+    mBoard->WriteCenteredLine(g, 240, "CONGRATULATIONS!");
 
     g->DrawImage(Sexy::IMAGE_GOD_HEAD,
-                 (cos(((mStateCount * SEXY_PI) / 180.0f) * 2) * 5.0f) + 50.0f,
-                 (sin(((mStateCount * SEXY_PI) / 180.0f) * 2) * 5.0f) + 160.0f);
+                 (cos(((mStateCount * SEXY_PI) / 180.0f) * 2) * 5.0f) + 50.0f * 2 + 320,
+                 (sin(((mStateCount * SEXY_PI) / 180.0f) * 2) * 5.0f) + 160.0f * 2 + 60);
 
     if (mStateCount > 0)
     {
-        mBoard->mGun->SetAngle(SEXY_PI * 2.0f / 3.0f);
+        mBoard->mGun->SetAngle(SEXY_PI * 4.0f / 6.0f);
         mBoard->mGun->Draw(g);
     }
 
@@ -693,7 +693,7 @@ void TransitionMgr::DoLevelBegin(bool firstTime)
     int aTextTop = mBoard->mHeight - 50;
 
     AddLetterStamp(mBoard->mVerboseLevelString,
-                   aTextLeft, aTextTop,
+                   aTextLeft - 350, aTextTop - 100,
                    0xFFFFFF, 20,
                    Sexy::FONT_HUGE_ID, mResetFrame - 40);
 
@@ -703,8 +703,8 @@ void TransitionMgr::DoLevelBegin(bool firstTime)
     int aSmallWidth = aFont->StringWidth(mBoard->mLevelDesc->mDisplayName);
 
     AddLetterStamp(mBoard->mLevelDesc->mDisplayName,
-                   aTextLeft + aVerbWidth - aSmallWidth,
-                   aTextTop + anAscent - anAscentPadding + 4,
+                   aTextLeft + aVerbWidth - aSmallWidth - 350,
+                   aTextTop + anAscent - anAscentPadding + 4 - 100,
                    0xFFFFFF, 60,
                    Sexy::FONT_BROWNTITLE_ID, mResetFrame - 90);
 }
@@ -721,7 +721,7 @@ void TransitionMgr::DoQuake()
     IntPoint m3(mBoard->mNextLevelDesc->mGunX, mBoard->mNextLevelDesc->mGunY);
     if (mDoTempleUp)
     {
-        m3 = IntPoint(320, 200);
+        m3 = IntPoint(320 * 2 + 320, 200 * 2 + 60);
     }
 
     IntPoint m2((7 * m1.mX + 3 * m3.mX) / 10, (7 * m1.mY + 3 * m3.mY) / 10);
@@ -783,6 +783,7 @@ void TransitionMgr::DoStageComplete()
 {
     mBoard->mSoundMgr->AddSound(Sexy::SOUND_STAGE_COMPLETE, 20);
     mTargetLevelFade = 128;
+
     if (!mBoard->mApp->Is3DAccelerated())
     {
         mBoard->mGun->SetAngle(0.0f);
@@ -791,7 +792,7 @@ void TransitionMgr::DoStageComplete()
 
     mStateCount = 0;
     mState = TransitionState_StageComplete;
-    Sexy::Font *aFont = Sexy::FONT_HUGE;
+    Sexy::Font* aFont = Sexy::FONT_HUGE;
 
     std::string aText;
     if (!mBoard->mPracticeBoard.empty())
@@ -810,6 +811,8 @@ void TransitionMgr::DoStageComplete()
     }
 
     int letX = 320 - aTextWidth / 2;
+    letX = letX * 2 + 320; // upscale + offset
+
     int gunCenterX = mBoard->mGun->GetCenterX();
     int gunCenterY = mBoard->mGun->GetCenterY();
     int aFrogStagger = 20;
@@ -820,13 +823,13 @@ void TransitionMgr::DoStageComplete()
         char aChar = aText[i];
         if (aChar == ' ')
         {
-            letX += aFont->CharWidth(' ');
+            letX += aFont->CharWidth(' ') * 2;
         }
         else
         {
             IntPoint m1(gunCenterX, gunCenterY);
-            IntPoint m2((gunCenterX + letX) / 2, (gunCenterY + 250) / 2);
-            IntPoint m3(letX, 250);
+            IntPoint m2((gunCenterX + letX) / 2, (gunCenterY + (250 * 2 + 60)) / 2);
+            IntPoint m3(letX, 250 * 2 + 60);
 
             AddFrogMove(m1, m2, 20, aFrogStagger);
             AddFrogScale(1.0f, 2.0f, 20, aFrogStagger);
@@ -838,17 +841,20 @@ void TransitionMgr::DoStageComplete()
 
             AddLetterStamp(aChar, m3.mX, m3.mY - 100, 0xffff00, aLetterStagger);
 
-            DrawTextParticles(std::string() + aChar, letX, 150, mBoard->mParticleMgr, aLetterStagger + 8);
+            DrawTextParticles(std::string() + aChar, letX, 150 * 2 + 60 + 100, mBoard->mParticleMgr, aLetterStagger + 8);
+
+
             gunCenterX = letX;
-            gunCenterY = 250;
-            letX += aFont->CharWidth(aChar);
+            gunCenterY = 250 * 2 + 60;
+            letX += aFont->CharWidth(aChar) * 2;
         }
     }
 
-    IntPoint em1(gunCenterX, 250);
-    IntPoint em2(150, 250);
-    IntPoint em3(500, 250);
-    IntPoint em4(320, 250 + mBoard->mGun->GetHeight());
+    IntPoint em1(gunCenterX, 250 * 2 + 60);
+    IntPoint em2(150 * 2 + 320, 250 * 2 + 60);
+    IntPoint em3(500 * 2 + 320, 250 * 2 + 60);
+    IntPoint em4(320 * 2 + 320, (250 + mBoard->mGun->GetHeight()) * 2 + 60 - 150);
+
 
     AddFrogMove(em1, em2, 20, 0);
     mStageCompleteFrame = aLetterStagger + 20;
@@ -856,16 +862,15 @@ void TransitionMgr::DoStageComplete()
     AddFrogMove(em3, em4, 30, 0);
 
     aText = "COMPLETE";
-
-    int aCompWidth = aFont->StringWidth(aText);
+    int aCompWidth = aFont->StringWidth(aText) * 2;
     int v42 = 0;
     int v28 = 0;
 
     for (int i = 0; i < 100; i++)
     {
         mBoard->mParticleMgr->AddSparkle(
-            ((320 - aCompWidth / 2) + v28 / 100),
-            250,
+            ((320 - aCompWidth / 2) * 2 + 320 + v28 / 100),
+            250 * 2 + 60,
             0,
             (Sexy::Rand() % 5) / 10.0 + 0.25,
             0,
@@ -877,6 +882,11 @@ void TransitionMgr::DoStageComplete()
         v28 += aCompWidth;
     }
 }
+
+
+
+
+
 
 void TransitionMgr::DoTempleComplete()
 {
@@ -911,8 +921,8 @@ void TransitionMgr::DoTempleComplete()
         int aStagger = AddTextBlurbWrap("Interloper of puny!  You suppose the secret of Zuma it is possible to take the knowing so easily?  "
                                         "No!  There is defect for your thinking!  Our cryptic hidden nature cannot be discovered "
                                         "so directly.  Three mystery shrines protect method!  Never you will strike past them!",
-                                        220, 180, 380, 150);
-        aStagger = AddTextBlurb(aText[0], 200, 380, aStagger + 100);
+                                        220 * 2 + 320, 180 * 2 + 60, 380, 150);
+        aStagger = AddTextBlurb(aText[0], 200 * 2 + 320, 380 * 2 +60, aStagger + 100);
         mResetFrame = aStagger + 100;
         break;
     }
@@ -921,8 +931,8 @@ void TransitionMgr::DoTempleComplete()
         int aStagger = AddTextBlurbWrap("I see what?!?  You have lived still.  Is it possible to be the one of which the ancient "
                                         "prophecy speaks?  It was sent in order perhaps to release me from my wicked capture person finally.  "
                                         "But no namely this was the story of the exactly old wive.  You want to live, now retreat!",
-                                        220, 180, 380, 150);
-        aStagger = AddTextBlurb(aText[1], 200, 380, aStagger + 100);
+            220 * 2 + 320, 180 * 2 + 60, 380, 150);
+        aStagger = AddTextBlurb(aText[1], 200 * 2 + 320, 380 * 2 + 60, aStagger + 100);
         mResetFrame = aStagger + 100;
         break;
     }
@@ -931,8 +941,8 @@ void TransitionMgr::DoTempleComplete()
         int aStagger = AddTextBlurbWrap("As for me it is not possible to believe!  Your power namely that is large!  But there is one "
                                         "more temple which you do not find, that the Zuma deeply buried under the land.  It was hidden, "
                                         "it is the temple of secret!  You the final temple must fight in order to take the cover of position of my jail!!",
-                                        220, 180, 380, 150);
-        aStagger = AddTextBlurb(aText[1], 200, 380, aStagger + 100);
+            220 * 2 + 320, 180 * 2 + 60, 380, 150);
+        aStagger = AddTextBlurb(aText[1], 200 * 2 + 320, 380 * 2 + 60, aStagger + 100);
         mResetFrame = aStagger + 100;
         break;
     }
@@ -941,12 +951,12 @@ void TransitionMgr::DoTempleComplete()
         std::string aStr = "The final temple of Zuma was struck!  Your extreme power is not possible to be defeated!  "
                            "As for me it can taste the taste whose almost freedom is sweet sweetly.  But God of the sun can "
                            "be imprisoned at only that true house.";
-        int aStagger = AddTextBlurbWrap(aStr, 220, 180, 380, 150);
-        aStagger - AddTextBlurb(aText[1], 200, 380, aStagger + 100);
+        int aStagger = AddTextBlurbWrap(aStr, 220 * 2 + 320, 180 * 2 + 60, 380, 150);
+        aStagger - AddTextBlurb(aText[1], 200 * 2 + 320, 380 * 2 + 60, aStagger + 100);
 
         int aTextY = 6 * Sexy::FONT_DIALOG->GetLineSpacing() + 180;
         aStagger - AddTextBlurbWrap("We come from the star, return to the star!  It is of you to rescue of my star.",
-                                    220, aTextY, 380, aStagger + 50);
+            200, 380, aStagger + 100);
         mResetFrame = aStagger + 100;
         break;
     }
@@ -955,7 +965,7 @@ void TransitionMgr::DoTempleComplete()
         int aStagger = AddTextBlurbWrap("Excellent work, mighty frog one!  You obtained your lawful place of the stars, at the side of the ancient "
                                         "ruler of the Zuma.  In the future, as for me, you are known as our sibling.  I will call you brother, "
                                         "and we control the outer space together!  It is joyous news!  Now we are to the dance!",
-                                        220, 180, 380, 150);
+            220 * 2 + 320, 180 * 2 + 60, 380, 150);
         aStagger = AddTextBlurb(aText[4], 200, 380, aStagger + 100);
         mResetFrame = aStagger + 100;
         break;

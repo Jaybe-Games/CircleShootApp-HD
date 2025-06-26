@@ -125,6 +125,7 @@ namespace Sexy
         void ShowPracticeScreen(bool fromMenu);
         void ShowCreditsScreen(bool happyEnd);
         void ShowMoreGamesScreen();
+        void KnutschMeineEier();
 
         void EndHelpScreen();
         void ReturnToMainMenu();

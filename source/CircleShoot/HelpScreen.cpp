@@ -88,14 +88,14 @@ HelpWidget1::HelpWidget1() : Widget()
     mHasTransparencies = true;
     mHasAlpha = true;
     mGun = new Gun();
-    mGun->SetFireSpeed(3.0);
+    mGun->SetFireSpeed(6.0);
     mGun->Reload(Sexy::AppRand() % 4);
     mGun->Reload(Sexy::AppRand() % 4);
 
-    mGunTarget = Point(240, 160);
-    mUnk60 = Point(240, 160);
+    mGunTarget = Point(240 * 2 + 320, 160 * 2 + 60);
+    mUnk60 = Point(240 * 2 + 320, 160 * 2 + 60);
     mLastGunShotCnt = -100000;
-    mGun->SetPos(mGun->GetWidth() / 2 + 10, mGun->GetHeight() / 2 + 60);
+    mGun->SetPos(mGun->GetWidth() / 2 + 10 * 2 + 320, mGun->GetHeight() / 2 + 60 * 2 + 60);
     UpdateGunAngle();
 }
 
@@ -145,8 +145,8 @@ void HelpWidget1::Draw(Graphics *g)
         (*aBulletItr)->Draw(g);
 
     g->SetFont(Sexy::FONT_DIALOG);
-    Rect aTopTextRect = Rect(30, 40, mWidth - 38, 2 * Sexy::FONT_DIALOG->GetHeight());
-    Rect aBottomTextRect = Rect(4, mHeight - 2 * Sexy::FONT_DIALOG->GetHeight() - 12,
+    Rect aTopTextRect = Rect(30 * 2 + 320, 40 * 2 + 60, mWidth - 38, 2 * Sexy::FONT_DIALOG->GetHeight());
+    Rect aBottomTextRect = Rect(4 * 2 + 320, mHeight - 2 * Sexy::FONT_DIALOG->GetHeight() - 12 * 2 + 60,
                                 mWidth - 8, 2 * Sexy::FONT_DIALOG->GetHeight());
 
     g->SetColor(Color(0xFFFF00));
@@ -160,7 +160,7 @@ void HelpWidget1::Draw(Graphics *g)
         Sexy::Color aColor = Color(0xFFFFFF);
         g->SetColor(aColor);
         g->SetFont(Sexy::FONT_PLAIN);
-        g->DrawString("CLICK!", mLastGunShotPoint.mX - 65, mLastGunShotPoint.mY - 10);
+        g->DrawString("CLICK!", mLastGunShotPoint.mX - 65 * 2 + 320, mLastGunShotPoint.mY - 10 * 2 + 60);
         g->SetFont(Sexy::FONT_DIALOG);
         g->DrawLine(mLastGunShotPoint.mX - 3, mLastGunShotPoint.mY - 3,
                     mLastGunShotPoint.mX - 8, mLastGunShotPoint.mY - 8);
@@ -305,7 +305,7 @@ void HelpWidget2::Update()
             float x = suckCount + aBall->GetX();
             aBall->SetPos(x, aBall->GetY());
             aBall->IncFrame(suckCount);
-            float ball1X = mBalls[1]->GetX() + 32.0;
+            float ball1X = mBalls[1]->GetX() + 32.0 * 2 + 320;
 
             if (aBall->GetX() > ball1X)
             {
@@ -410,7 +410,7 @@ void HelpWidget2::Draw(Graphics *g)
 void HelpWidget2::Reset()
 {
     mAnimCnt = 0;
-    mBullet->SetPos(-10.0, 20.0);
+    mBullet->SetPos(-10.0 * 2 + 320, 20.0 * 2 + 60);
     mBullet->SetVelocity(1.3, 1.0);
     mBullet->SetClearCount(0);
     float theRot = atan2(mBullet->GetVelY(), mBullet->GetVelX());
@@ -420,10 +420,10 @@ void HelpWidget2::Reset()
     if (!mDiverseColors)
         aBallTypes[5] = 2;
 
-    int anOffset = 80;
+    int anOffset = 80 + 2 + 320;
     for (int i = 0; i < 6; i++)
     {
-        mBalls[i]->SetPos(anOffset, 150.0);
+        mBalls[i]->SetPos(anOffset, 150.0 * 2 + 60);
         mBalls[i]->SetClearCount(0);
         mBalls[i]->SetSuckCount(0);
         mBalls[i]->SetType(aBallTypes[i]);
@@ -463,23 +463,23 @@ void HelpWidget3::Draw(Graphics *g)
     Widget::Draw(g);
     g->SetFont(Sexy::FONT_DIALOG);
     g->SetColor(Color(0xFFFFFF));
-    g->DrawImage(Sexy::IMAGE_HOLE, 65, 20);
-    g->DrawImageCel(Sexy::IMAGE_HOLE_COVER, 65, 20, 0);
+    g->DrawImage(Sexy::IMAGE_HOLE, 65 * 2 + 320, 20 * 2 + 60);
+    g->DrawImageCel(Sexy::IMAGE_HOLE_COVER, 65 * 2 + 320, 20 * 2 + 60, 0);
 
-    Rect aTopTextRect = Rect(30, mHeight - 2 * Sexy::FONT_DIALOG->GetHeight() - 15, 160, 0);
+    Rect aTopTextRect = Rect(30 * 2 + 320, mHeight - 2 * Sexy::FONT_DIALOG->GetHeight() - 15 * 2 + 60, 160, 0);
     g->SetColor(Color(0xFFFF00));
     WriteWordWrapped(g, aTopTextRect, "Don't let the balls reach the skull!", -1, 0);
 
-    g->DrawImageCel(Sexy::IMAGE_COIN, 282, 45, (mUpdateCnt / 4) % 30);
+    g->DrawImageCel(Sexy::IMAGE_COIN, 282 * 2 + 320, 45 * 2 + 60, (mUpdateCnt / 4) % 30);
 
-    Rect aBottomTextRect = Rect(220, mHeight - 2 * Sexy::FONT_DIALOG->GetHeight() - 15, 160, 0);
+    Rect aBottomTextRect = Rect(220 * 2 + 320, mHeight - 2 * Sexy::FONT_DIALOG->GetHeight() - 15, 160 * 2 + 60, 0);
     g->SetColor(Color(0xFFFF00));
     WriteWordWrapped(g, aBottomTextRect, "Shoot coins for extra points!", -1, 0);
 
-    mGun->SetPos(500, 65);
+    mGun->SetPos(500 * 2 + 320, 65 * 2 + 60);
     mGun->Draw(g);
 
-    Rect aRightTextRect = Rect(430, mHeight - 2 * Sexy::FONT_DIALOG->GetHeight() - 15, 170, 0);
+    Rect aRightTextRect = Rect(430 * 2 + 320, mHeight - 2 * Sexy::FONT_DIALOG->GetHeight() - 15 * 2 + 60, 170, 0);
     int frame = 1;
 
     if ((mUpdateCnt % 200) < 80 && mUpdateCnt > 100)
@@ -487,11 +487,11 @@ void HelpWidget3::Draw(Graphics *g)
         frame = 0;
         g->SetFont(Sexy::FONT_PLAIN);
         g->SetColor(Color(0xFFFFFF));
-        g->DrawString("CLICK!", 560, 55);
+        g->DrawString("CLICK!", 560 + 2 + 320, 55 * 2 + 60);
         g->SetFont(Sexy::FONT_DIALOG);
     }
 
-    g->DrawImageCel(Sexy::IMAGE_RIGHT_MOUSE, 580, 60, frame);
+    g->DrawImageCel(Sexy::IMAGE_RIGHT_MOUSE, 580 * 2 + 320, 60 * 2 + 60, frame);
 
     g->SetColor(Color(0xFFFF00));
     WriteWordWrapped(g, aRightTextRect, "Right mouse button will swap the balls.", -1, 0);
@@ -508,7 +508,7 @@ HelpBack::~HelpBack()
 
 void HelpBack::Draw(Graphics *g)
 {
-    g->DrawImage(Sexy::IMAGE_HELP_BACK, 11, 51);
+    g->DrawImage(Sexy::IMAGE_HELP_BACK, 340,160);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -524,6 +524,7 @@ HelpScreen::HelpScreen() : Widget()
     mShowHelpCheckbox = Sexy::MakeCheckbox(0, this);
     mOKButton = MakeButton(0, this, "OK", CircleButton::CB_ClickSound, NULL, 3);
     mShowHelpCheckbox->mChecked = !GetCircleShootApp()->mProfile->mShowHelpScreen;
+
 }
 
 HelpScreen::~HelpScreen()
@@ -540,21 +541,22 @@ HelpScreen::~HelpScreen()
 void HelpScreen::Resize(int theX, int theY, int theWidth, int theHeight)
 {
     Widget::Resize(theX, theY, theWidth, theHeight);
-    mHelpWidget1->Resize(mX + 10, mY + 25, 305, 220);
+    mHelpWidget1->Resize(mX + 10 * 2 + 320, mY + 25 * 2 + 60, 305, 220);
     mHelpWidget2->Layout(LAY_SameTop | LAY_Right | LAY_SameSize, mHelpWidget1, 10, 0, 0, 0);
     mHelpWidget3->Layout(LAY_SameLeft | LAY_Below | LAY_SetHeight, mHelpWidget1, 0, 10, 0, 160);
     mHelpWidget3->Layout(LAY_GrowToRight, mHelpWidget2, 0, 0, 0, 0);
-    mOKButton->Resize(mX + mWidth - 160, mY + mHeight - mOKButton->mHeight + 5, 150, mOKButton->mHeight);
+    mOKButton->Resize(mX + mWidth - 160 * 2 + 320, mY + mHeight - mOKButton->mHeight + 5 * 2 + 60, 150, mOKButton->mHeight);
     mShowHelpCheckbox->Resize(mX + 10, mOKButton->mY, mShowHelpCheckbox->mWidth, mShowHelpCheckbox->mHeight);
 }
 
 void HelpScreen::Draw(Graphics *g)
 {
     Widget::Draw(g);
-    g->DrawImage(Sexy::IMAGE_HELP_FRONT, 0, 0);
+    g->DrawImage(Sexy::IMAGE_HELP_FRONT, 320, 60);
     g->SetFont(Sexy::FONT_DIALOG);
     g->SetColor(Color(0xFFFF00));
     DrawCheckboxText(g, "Don't show this screen at startup.", mShowHelpCheckbox);
+    g->DrawImage(Sexy::IMAGE_GAMEBORDER, 0, 0);
 }
 
 void HelpScreen::AddedToManager(WidgetManager *theWidgetManager)

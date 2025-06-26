@@ -15,19 +15,33 @@ using namespace Sexy;
 int gVersion = 3;
 float INV_SUBPIXEL_MULT = 0.01f;
 
+// Definiere die neue Auflösung
+const float NEW_WIDTH = 1280.0f;
+const float NEW_HEIGHT = 960.0f;
+const float OLD_WIDTH = 640.0f;
+const float OLD_HEIGHT = 480.0f;
+
+// Berechne die Skalierungsfaktoren
+const float SCALE_X = NEW_WIDTH / OLD_WIDTH;
+const float SCALE_Y = NEW_HEIGHT / OLD_HEIGHT;
+
+// Definiere den Offset
+const float OFFSET_X = 320.0f;
+const float OFFSET_Y = 60.0f;
+
 CurveData::CurveData()
 {
     Clear();
 }
 
-bool CurveData::Save(const std::string &theFilePath, bool smallVersion)
+bool CurveData::Save(const std::string& theFilePath, bool smallVersion)
 {
     // TODO: doesn't seem to be present in any .exe?
 
     return false;
 }
 
-bool CurveData::Load(const std::string &theFilePath)
+bool CurveData::Load(const std::string& theFilePath)
 {
     Clear();
 
@@ -85,7 +99,7 @@ bool CurveData::Load(const std::string &theFilePath)
             return false;
         }
 
-        uchar *aByteArray = new uchar[aBufferSize];
+        uchar* aByteArray = new uchar[aBufferSize];
         aReader.ReadBytes(aByteArray, aBufferSize);
         mEditData.WriteBytes(aByteArray, aBufferSize);
         delete[] aByteArray;
@@ -97,10 +111,10 @@ bool CurveData::Load(const std::string &theFilePath)
         if (mVersion > 1)
         {
             mPointList.push_back(PathPoint());
-            PathPoint &aStartPoint = mPointList.back();
+            PathPoint& aStartPoint = mPointList.back();
 
-            aStartPoint.x = aReader.ReadFloat();
-            aStartPoint.y = aReader.ReadFloat();
+            aStartPoint.x = aReader.ReadFloat() * SCALE_X + OFFSET_X; // Angepasst für neuen Offset
+            aStartPoint.y = aReader.ReadFloat() * SCALE_Y + OFFSET_Y; // Angepasst für neuen Offset
 
             if (hasTunnels)
             {
@@ -114,13 +128,13 @@ bool CurveData::Load(const std::string &theFilePath)
             for (ulong i = 0; i < aSize - 1; i++)
             {
                 mPointList.push_back(PathPoint());
-                PathPoint &aPoint = mPointList.back();
+                PathPoint& aPoint = mPointList.back();
 
                 signed char dx = aReader.ReadByte();
                 signed char dy = aReader.ReadByte();
 
-                aPoint.x = dx * INV_SUBPIXEL_MULT + ox;
-                aPoint.y = dy * INV_SUBPIXEL_MULT + oy;
+                aPoint.x = (dx * INV_SUBPIXEL_MULT * SCALE_X) + ox; // Angepasst für neuen Offset
+                aPoint.y = (dy * INV_SUBPIXEL_MULT * SCALE_Y) + oy; // Angepasst für neuen Offset
 
                 if (hasTunnels)
                 {
@@ -137,10 +151,10 @@ bool CurveData::Load(const std::string &theFilePath)
             for (ulong i = 0; i < aSize; i++)
             {
                 mPointList.push_back(PathPoint());
-                PathPoint &aPoint = mPointList.back();
+                PathPoint& aPoint = mPointList.back();
 
-                aPoint.x = aReader.ReadFloat();
-                aPoint.y = aReader.ReadFloat();
+                aPoint.x = aReader.ReadFloat() * SCALE_X + OFFSET_X; // Angepasst für neuen Offset
+                aPoint.y = aReader.ReadFloat() * SCALE_Y + OFFSET_Y; // Angepasst für neuen Offset
                 aPoint.mInTunnel = aReader.ReadBool();
                 aPoint.mPriority = aReader.ReadByte();
             }
@@ -156,3 +170,4 @@ void CurveData::Clear()
     mEditType = 0;
     mEditData.Clear();
 }
+

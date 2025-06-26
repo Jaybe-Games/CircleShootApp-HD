@@ -4,8 +4,8 @@
 #include <SexyAppFramework/Point.h>
 
 // For convenience of making mods that want a different window size.
-#define CIRCLE_WINDOW_WIDTH 640
-#define CIRCLE_WINDOW_HEIGHT 480
+#define CIRCLE_WINDOW_WIDTH 1920
+#define CIRCLE_WINDOW_HEIGHT 1080
 
 #define MAX_PRIORITY 5
 #define MAX_BALL_COLORS 6

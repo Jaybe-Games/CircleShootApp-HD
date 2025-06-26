@@ -381,20 +381,24 @@ void FloatingTextHelper::AddToMgr(ParticleMgr *theMgr, int x, int y, int theStag
         aTotalHeight += aDesc.mHeight;
     }
 
+    // Neue Grenzen für 1920x1080 Auflösung
+    const int screenWidth = 1920;
+    const int screenHeight = 1080;
+
     int textX = x - aTotalWidth / 2;
     int textY = y + aTotalHeight / 2;
 
-    if (aTotalWidth + textX > 600)
-        textX = 600 - aTotalWidth;
+    // Optional: Kollision mit Bildschirmrändern vermeiden
+    if (textX + aTotalWidth > screenWidth)
+        textX = screenWidth - aTotalWidth;
+    if (textX < 0)
+        textX = 0;
 
-    if (aTotalHeight - textY > 440)
-        textY = 440 - aTotalHeight;
+    if (textY + aTotalHeight > screenHeight)
+        textY = screenHeight - aTotalHeight;
+    if (textY < 0)
+        textY = 0;
 
-    if (textY < 100)
-        textY = 100;
-
-    if (textX < 40)
-        textX = 40;
 
     for (size_t i = 0; i < mText.size(); ++i)
     {

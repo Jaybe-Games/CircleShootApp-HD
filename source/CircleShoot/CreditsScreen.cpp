@@ -56,7 +56,8 @@ void CreditsScreen::Draw(Graphics *g)
 	Widget::Draw(g);
 	if (mBackgroundImage != NULL)
 	{
-		g->DrawImage(mBackgroundImage, 0, 0);
+		g->DrawImage(mBackgroundImage, 355 * 2 + 320, 90 * 2 + 60);
+		
 	}
 	else
 	{
@@ -86,6 +87,8 @@ void CreditsScreen::Draw(Graphics *g)
 		{Sexy::FONT_BROWNTITLE, "Brian Fiete", 35},
 		{Sexy::FONT_TITLE, "Biz Dev", 0},
 		{Sexy::FONT_BROWNTITLE, "Don Walters", 35},
+		{Sexy::FONT_TITLE, "HD Port by JAYBE GAMES", 0},
+		{Sexy::FONT_BROWNTITLE, "JAYBE", 35},
 		{Sexy::FONT_TITLE, "Special Thanks To", 0},
 		{Sexy::FONT_BROWNTITLE, "Jordin Baugh", 0},
 		{Sexy::FONT_BROWNTITLE, "John Vechey", 0},
@@ -110,6 +113,7 @@ void CreditsScreen::Draw(Graphics *g)
 		{Sexy::FONT_TITLE, "Jim O'Connor", 0},
 #endif
 	};
+
 	static int aNumCredits = sizeof(aCredits) / sizeof(aCredits[0]);
 
 	g->SetColor(Color(0xFFFFFF));
@@ -149,6 +153,7 @@ void CreditsScreen::Draw(Graphics *g)
 		g->FillRect(0, 0, CIRCLE_WINDOW_WIDTH, CIRCLE_WINDOW_HEIGHT);
 		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
 	}
+	g->DrawImage(IMAGE_GAMEBORDER, 0, 0);
 }
 
 void CreditsScreen::Update()
@@ -166,7 +171,7 @@ void CreditsScreen::Update()
 void CreditsScreen::AddedToManager(WidgetManager *theWidgetManager)
 {
 	Widget::AddedToManager(theWidgetManager);
-	mWhateverButton->Resize(CIRCLE_WINDOW_WIDTH - 130, CIRCLE_WINDOW_HEIGHT - mWhateverButton->mHeight, 120, mWhateverButton->mHeight);
+	mWhateverButton->Resize(CIRCLE_WINDOW_WIDTH - 450, CIRCLE_WINDOW_HEIGHT - mWhateverButton->mHeight - 60, 120, mWhateverButton->mHeight);
 	theWidgetManager->AddWidget(mWhateverButton);
 }
 

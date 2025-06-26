@@ -180,7 +180,7 @@ SexyAppBase::SexyAppBase()
 	// Extract product version
 	char aPath[_MAX_PATH];
 	GetModuleFileNameA(NULL, aPath, 256);
-	mProductVersion = GetProductVersion(aPath);	
+	mProductVersion = "1.2.0";
 	mChangeDirTo = GetFileDir(aPath);
 
 	mNoDefer = false;	
@@ -191,8 +191,8 @@ SexyAppBase::SexyAppBase()
 	mTitle = _S("SexyApp");
 	mShutdown = false;
 	mExitToTop = false;
-	mWidth = 640;
-	mHeight = 480;
+	mWidth = 1920;
+	mHeight = 1080;
 	mFullscreenBits = 16;
 	mIsWindowed = true;
 	mIsPhysWindowed = true;
@@ -282,12 +282,12 @@ SexyAppBase::SexyAppBase()
 	mDrawTime = 0;
 	mScreenBltTime = 0;
 	mAlphaDisabled = false;	
-	mDebugKeysEnabled = false;
+	mDebugKeysEnabled = true;
 	mOldWndProc = 0;
 	mNoSoundNeeded = false;
 	mWantFMod = false;
 
-	mSyncRefreshRate = 100;
+	mSyncRefreshRate = 144;
 	mVSyncUpdates = false;
 	mVSyncBroken = false;
 	mVSyncBrokenCount = 0;
@@ -296,15 +296,15 @@ SexyAppBase::SexyAppBase()
 	mWaitForVSync = false;
 	mSoftVSyncWait = true;
 	mUserChanged3DSetting = false;
-	mAutoEnable3D = false;
+	mAutoEnable3D = true;
 	mTest3D = false;
 	mMinVidMemory3D = 6;
 	mRecommendedVidMemory3D = 14;
 	mRelaxUpdateBacklogCount = 0;
-	mWidescreenAware = false;
-	mEnableWindowAspect = false;
-	mWindowAspect.Set(4, 3);
-	mIsWideWindow = false;
+	mWidescreenAware = true;
+	mEnableWindowAspect = true;
+	mWindowAspect.Set(16, 9);
+	mIsWideWindow = true;
 
 	int i;
 

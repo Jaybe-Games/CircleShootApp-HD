@@ -21,8 +21,8 @@ Sexy::MemoryImage *gShooterTop = 0;
 
 Gun::Gun()
 {
-    mCenterX = 320;
-    mCenterY = 240;
+    mCenterX = 1920 / 2;
+    mCenterY = 1080 / 2;
     mWidth = Sexy::IMAGE_SHOOTER_BOTTOM->GetWidth();
     mHeight = Sexy::IMAGE_SHOOTER_BOTTOM->GetHeight();
 
@@ -30,7 +30,7 @@ Gun::Gun()
         gShooterTop = Sexy::CutoutImageFromAlpha(
             reinterpret_cast<MemoryImage *>(Sexy::IMAGE_SHOOTER_BOTTOM),
             reinterpret_cast<MemoryImage *>(Sexy::IMAGE_SHOOTER_TOP),
-            31, 12);
+            63, 25);
 
     mAngle = 0.0f;
     mRecoilCount = 0;
@@ -158,37 +158,41 @@ void Gun::SetAngle(float theAngle)
 
 void Gun::Draw(Graphics *g)
 {
-    int aCornerX = mCenterX - 54;
-    int aCornerY = mCenterY - 54;
+    int aCornerX = mCenterX - 108;
+    int aCornerY = mCenterY - 108;
 
-    g->DrawImageRotated(Sexy::IMAGE_SHOOTER_BOTTOM, aCornerX, aCornerY, mAngle, 54, 54);
+    g->DrawImageRotated(Sexy::IMAGE_SHOOTER_BOTTOM, aCornerX, aCornerY, mAngle, 108, 108);
 
     int aOff;
+    float scaleFactor = 216.0f / 108.0f;
+
     switch (mState)
     {
     case GunState_Normal:
-        aOff = 51;
+        aOff = static_cast<int>(51 * scaleFactor); // When holding a ball
         break;
     case GunState_Firing:
-        aOff = (mStatePercent * 30.0f) + (1.0f - mStatePercent) * 51.0f;
+        aOff = static_cast<int>((mStatePercent * 30.0f) + (1.0f - mStatePercent) * 51.0f * scaleFactor);
         break;
     case GunState_Reloading:
-        aOff = (mStatePercent * 51.0f) + (1.0f - mStatePercent) * 30.0f;
+        aOff = static_cast<int>((mStatePercent * 51.0f) + (1.0f - mStatePercent) * 30.0f * scaleFactor);
         break;
     }
 
-    int aTongueSomething = 17;
+    int aTongueSomething = static_cast<int>(17 * scaleFactor); // default value I guess
 
     if (mBullet != NULL)
     {
-        aTongueSomething = 54 - aOff;
+        aTongueSomething = static_cast<int>(54 * scaleFactor) - aOff; // oh don't ask me
     }
     else
     {
-        aOff = 37;
+        aOff = static_cast<int>(37 * scaleFactor); // This is without any ball in mouth
     }
 
-    g->DrawImageRotated(Sexy::IMAGE_SHOOTER_TONGUE, aCornerX + 38, aCornerY + aOff, mAngle, 16, aTongueSomething);
+    g->DrawImageRotated(Sexy::IMAGE_SHOOTER_TONGUE, aCornerX + static_cast<int>(38 * scaleFactor), aCornerY + aOff, mAngle, static_cast<int>(16 * scaleFactor), aTongueSomething);
+
+
 
     if (mBullet != NULL)
         mBullet->Draw(g);
@@ -201,11 +205,11 @@ void Gun::Draw(Graphics *g)
             int aColorHeight = Sexy::IMAGE_NEXT_BALL->mHeight;
             Rect aColorRect(mNextBullet->GetType() * aColorWidth, 0, aColorWidth, aColorHeight);
 
-            g->DrawImageRotatedF(Sexy::IMAGE_NEXT_BALL, aCornerX + 47, aCornerY + 22, mAngle, 7, 32, &aColorRect);
+            g->DrawImageRotatedF(Sexy::IMAGE_NEXT_BALL, aCornerX + static_cast<int>(47 * scaleFactor), aCornerY + static_cast<int>(22 * scaleFactor), mAngle, static_cast<int>(7 * scaleFactor), static_cast<int>(32 * scaleFactor), &aColorRect);
         }
     }
 
-    g->DrawImageRotated(gShooterTop, aCornerX + 31, aCornerY + 12, mAngle, 23, 42);
+    g->DrawImageRotated(gShooterTop, aCornerX + static_cast<int>(31 * scaleFactor), aCornerY + static_cast<int>(12 * scaleFactor), mAngle, static_cast<int>(23 * scaleFactor), static_cast<int>(42 * scaleFactor));
 
     if (mBlinkCount == 0)
         return;
@@ -227,7 +231,7 @@ void Gun::Draw(Graphics *g)
         mWidth /= 2;
 
     Rect anEyeRect(0, blink * aHeight, aWidth, aHeight);
-    g->DrawImageRotatedF(Sexy::IMAGE_EYE_BLINK, aCornerX + 25, aCornerY + 42, mAngle, 29, 12, &anEyeRect);
+    g->DrawImageRotatedF(Sexy::IMAGE_EYE_BLINK, aCornerX + static_cast<int>(25 * scaleFactor), aCornerY + static_cast<int>(42 * scaleFactor), mAngle, static_cast<int>(29 * scaleFactor), static_cast<int>(12 * scaleFactor), &anEyeRect);
 }
 
 void Gun::DrawShadow(Graphics *g)
@@ -530,7 +534,7 @@ void Gun::CalcAngle()
         return;
 
     float start = mCenterY - 20;
-    float end = mCenterY + 25;
+    float end = mCenterY + 25 * 2;
     float aPointX = (mCenterX + 1);
     float aPointY = 0.0f;
 
@@ -551,7 +555,7 @@ void Gun::CalcAngle()
         return;
     }
 
-    RotateXY(aPointX, aPointY, mCenterX, mCenterY, mAngle);
+    RotateXY(aPointX, aPointY, mCenterX, mCenterY - 5, mAngle);
     mBullet->SetPos(aPointX, aPointY);
     mBullet->SetRotation(mAngle);
 }

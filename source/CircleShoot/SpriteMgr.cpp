@@ -132,7 +132,7 @@ SpriteMgr::SpriteMgr()
     mSpaceScroll = true;
     mNebulaImage = NULL;
     mBackgroundImage = new DDImage(gSexyAppBase->mDDInterface);
-    mBackgroundImage->Create(640, 480);
+    mBackgroundImage->Create(1920, 1080);
 }
 
 SpriteMgr::~SpriteMgr()
@@ -205,7 +205,7 @@ void SpriteMgr::SetupLevel(const LevelDesc &theLevel, MirrorType theMirror)
     if (!theLevel.mImagePath.empty() && (anImage = gSexyAppBase->GetImage(theLevel.mImagePath), ImageMirror(anImage, theMirror), anImage))
     {
         mHasBackground = true;
-        g.DrawImage(anImage, 0, 0);
+        g.DrawImage(anImage, 320, 60);
         delete anImage;
     }
     else
@@ -222,7 +222,7 @@ void SpriteMgr::SetupLevel(const LevelDesc &theLevel, MirrorType theMirror)
         }
 
         g.SetColor(Color(gBoardColor));
-        g.FillRect(0, 0, 640, 480);
+        g.FillRect(0, 0, 1920, 1080);
     }
 
     if (gImageCutter == NULL)
@@ -287,7 +287,7 @@ void SpriteMgr::GenerateBackgroundTransitionSprites(const LevelDesc &theLevel)
     mBackgroundSprites.clear();
 
     MemoryImage anImage(gSexyAppBase);
-    anImage.Create(640, 480);
+    anImage.Create(800 * 2 + 320, 600 * 2 + 60);
     Graphics g(&anImage);
     DrawBackground(&g);
 
@@ -316,9 +316,9 @@ void SpriteMgr::DrawSpace(Graphics *g)
     if (mNebulaImage)
     {
         int scrollY = (mUpdateCnt / 4) % mNebulaImage->mHeight;
-        g->DrawImage(mNebulaImage, 0, scrollY - mNebulaImage->mHeight);
-        g->DrawImage(mNebulaImage, 0, scrollY);
-        g->DrawImage(mNebulaImage, 0, scrollY + mNebulaImage->mHeight);
+        g->DrawImage(mNebulaImage, 320, scrollY - mNebulaImage->mHeight);
+        g->DrawImage(mNebulaImage, 320, scrollY);
+        g->DrawImage(mNebulaImage, 320, scrollY + mNebulaImage->mHeight);
 
         for (StarList::const_iterator iter = mStarList.begin(); iter != mStarList.end(); ++iter)
         {
@@ -329,8 +329,9 @@ void SpriteMgr::DrawSpace(Graphics *g)
     else
     {
         g->SetColor(Sexy::Color(0));
-        g->FillRect(0, 0, 640, 480);
+        g->FillRect(0, 0, 0, 0);
     }
+    g->DrawImage(IMAGE_MM_GAMEBORDER, 0, 0);
 }
 
 void SpriteMgr::GenerateTransitionSprite(MemoryImage *theBackgroundImage, MemoryImage *theAlpha, const SpriteDesc &theDesc)
@@ -408,7 +409,7 @@ void SpriteMgr::AddStar(int y)
 
     StarInfo &aStar = mStarList.back();
     aStar.y = y;
-    aStar.x = rand() % CIRCLE_WINDOW_WIDTH;
+    aStar.x = rand() % 1920;
 
     switch (rand() % 3)
     {
@@ -472,7 +473,7 @@ void SpriteMgr::UpdateStars()
 {
     bool aIs3DAccel = (gSexyAppBase->Is3DAccelerated());
 
-    if (mStarList.size() == 1000)
+    if (mStarList.size() == 2000)
     {
         for (StarList::iterator anItr = mStarList.begin(); anItr != mStarList.end();)
         {
@@ -487,7 +488,7 @@ void SpriteMgr::UpdateStars()
             }
         }
 
-        while (mStarList.size() < 1000)
+        while (mStarList.size() < 2000)
         {
             AddStar(0);
         }
@@ -495,7 +496,7 @@ void SpriteMgr::UpdateStars()
     else
     {
         mStarList.clear();
-        for (int i = 0; i < 1000; i++)
+        for (int i = 0; i < 2000; i++)
         {
             AddStar(rand() % CIRCLE_WINDOW_HEIGHT);
         }
@@ -621,15 +622,15 @@ void SpriteMgr::SetupSpace()
 {
     mInSpace = true;
     bool aIs3DAccelerated = gSexyAppBase->Is3DAccelerated();
-    for (int i = 0; i < 1000; i++)
+    for (int i = 0; i < 3000; i++)
     {
-        AddStar(rand() % 480);
+        AddStar(rand() % 1280);
     }
 
     mNebulaImage = gSexyAppBase->GetImage("images/nebula1", false);
 }
 
-void SpriteMgr::DrawBackgroundTransition(Graphics *g)
+void SpriteMgr::DrawBackgroundTransition(Graphics* g)
 {
     if (mBackgroundSprites.empty())
     {
@@ -641,16 +642,20 @@ void SpriteMgr::DrawBackgroundTransition(Graphics *g)
         g->SetColorizeImages(true);
         g->SetColor(Color(0, 0, 0, 80));
         g->DrawImage(anItr->mImage,
-                     anItr->x - (anItr->vx * 50.0f),
-                     anItr->y - (anItr->vy * 50.0f));
+            (anItr->x - anItr->vx * 50.0f),
+            (anItr->y - anItr->vy * 50.0f));
         g->SetColorizeImages(false);
     }
 
     for (SpriteList::iterator anItr = mBackgroundSprites.begin(); anItr != mBackgroundSprites.end(); anItr++)
     {
-        g->DrawImage(anItr->mImage, anItr->x, anItr->y);
+        g->DrawImage(anItr->mImage,
+            anItr->x,
+            anItr->y);
     }
 }
+
+
 
 void SpriteMgr::UpdateBackgroundTransition(int theStep)
 {
@@ -686,6 +691,7 @@ void SpriteMgr::UpdateBackgroundTransition(int theStep)
         }
     }
 }
+
 
 void SpriteMgr::DrawBackground(Graphics *g)
 {

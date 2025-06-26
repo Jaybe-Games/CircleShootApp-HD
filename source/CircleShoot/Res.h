@@ -212,6 +212,7 @@ namespace Sexy
     // Init Resources
 	bool ExtractInitResources(ResourceManager *theMgr);
 
+	extern Image* IMAGE_GAMEBORDER;
     extern Image* IMAGE_LOADING_SCREEN;
     extern Image* IMAGE_LOADERBAR;
     extern Image* IMAGE_CURSOR_POINTER;
@@ -343,6 +344,7 @@ namespace Sexy
     extern Font* FONT_MAIN8;
     extern Font* FONT_MAIN8OUTLINE;
     extern Font* FONT_MONODIGIT;
+    extern Image* IMAGE_MM_GAMEBORDER;
     extern Image* IMAGE_SUNGLOW;
     extern Image* IMAGE_BLUE_BALL;
     extern Image* IMAGE_YELLOW_BALL;

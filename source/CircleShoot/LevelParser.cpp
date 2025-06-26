@@ -54,7 +54,7 @@ LevelDesc::LevelDesc()
     mHueRot = 0;
     mGunX = 320;
     mGunY = 240;
-    mFireSpeed = 6.0;
+    mFireSpeed = 12.0;
     mReloadDelay = 0;
     mBGColor = -1;
     mTreasureFreq = 300;

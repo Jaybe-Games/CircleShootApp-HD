@@ -10,7 +10,7 @@ using namespace Sexy;
 ///////////////////////////////////////////////////////////////////////////////
 
 static void *gResources[] =
-    {
+    {   
         &IMAGE_LOADING_SCREEN,
         &IMAGE_LOADERBAR,
         &IMAGE_CURSOR_POINTER,
@@ -196,6 +196,7 @@ static void *gResources[] =
         &FONT_MAIN12,
         &FONT_MAIN8,
         &FONT_MAIN8OUTLINE,
+        &IMAGE_GAMEBORDER,
 };
 
 Image *Sexy::GetImageById(ResourceId theId)
@@ -252,6 +253,7 @@ Image *Sexy::IMAGE_CURSOR_HAND;
 Image *Sexy::IMAGE_CURSOR_POINTER;
 Image *Sexy::IMAGE_CURSOR_TEXT;
 
+Image *Sexy::IMAGE_GAMEBORDER;
 Image *Sexy::IMAGE_LOADERBAR;
 Image *Sexy::IMAGE_LOADING_SCREEN;
 
@@ -271,7 +273,8 @@ bool Sexy::ExtractInitResources(ResourceManager *theMgr)
         IMAGE_CURSOR_HAND = aMgr.GetImageThrow("IMAGE_CURSOR_HAND");
         IMAGE_CURSOR_POINTER = aMgr.GetImageThrow("IMAGE_CURSOR_POINTER");
         IMAGE_CURSOR_TEXT = aMgr.GetImageThrow("IMAGE_CURSOR_TEXT");
-
+        
+		IMAGE_GAMEBORDER = aMgr.GetImageThrow("IMAGE_GAMEBORDER");
         IMAGE_LOADERBAR = aMgr.GetImageThrow("IMAGE_LOADERBAR");
         IMAGE_LOADING_SCREEN = aMgr.GetImageThrow("IMAGE_LOADING_SCREEN");
     }
@@ -325,7 +328,6 @@ bool Sexy::ExtractAdventureScreenResources(ResourceManager *theMgr)
     }
     return true;
 }
-
 Image *Sexy::IMAGE_ADVBACK;
 Image *Sexy::IMAGE_ADVDOOR1A;
 Image *Sexy::IMAGE_ADVDOOR1B;
@@ -387,7 +389,6 @@ bool Sexy::ExtractGauntletScreenResources(ResourceManager *theMgr)
     }
     return true;
 }
-
 Image *Sexy::IMAGE_GAUNTBACKBUTTON;
 Image *Sexy::IMAGE_GAUNTDOOR1;
 Image *Sexy::IMAGE_GAUNTDOOR2;
@@ -439,6 +440,7 @@ bool Sexy::ExtractMainMenuResources(ResourceManager *theMgr)
     ResourceManager &aMgr = *theMgr;
     try
     {
+        IMAGE_MM_GAMEBORDER = aMgr.GetImageThrow("IMAGE_GAMEBORDER");
         IMAGE_MM_ARCADE = aMgr.GetImageThrow("IMAGE_MM_ARCADE");
         IMAGE_MM_BACK = aMgr.GetImageThrow("IMAGE_MM_BACK");
         IMAGE_MM_EYELEFT = aMgr.GetImageThrow("IMAGE_MM_EYELEFT");
@@ -458,7 +460,6 @@ bool Sexy::ExtractMainMenuResources(ResourceManager *theMgr)
     }
     return true;
 }
-
 Image *Sexy::IMAGE_MM_ARCADE;
 Image *Sexy::IMAGE_MM_BACK;
 Image *Sexy::IMAGE_MM_EYELEFT;
@@ -471,6 +472,7 @@ Image *Sexy::IMAGE_MM_OPTIONS;
 Image *Sexy::IMAGE_MM_QUIT;
 Image *Sexy::IMAGE_MM_SKY;
 Image *Sexy::IMAGE_MM_SUN;
+Image *Sexy::IMAGE_MM_GAMEBORDER;
 
 ///////////////////////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////////////////////

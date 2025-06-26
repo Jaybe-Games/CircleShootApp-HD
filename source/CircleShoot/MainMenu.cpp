@@ -20,6 +20,9 @@
 #include "Res.h"
 #include "MainMenu.h"
 
+#include <windows.h>
+#include <shellapi.h>
+
 #include <math.h>
 
 using namespace Sexy;
@@ -50,7 +53,7 @@ bool MainMenu::mMoveEyes = false;
 
 MainMenu::MainMenu()
 {
-    mEyeCutoutPos = Point(191, 331);
+    mEyeCutoutPos = Point(191 * 2, 331 * 2);
     mUFOImage = NULL;
     mFlash = 0;
     mMainMenuOverlay = new MainMenuOverlay(this);
@@ -71,10 +74,10 @@ MainMenu::MainMenu()
     int aTextWidth = Sexy::FONT_MAIN10->StringWidth(mNotYouLink->mLabel) + 20;
     mNotYouLink->Resize(
         (CIRCLE_WINDOW_WIDTH - aTextWidth) / 2,
-        30,
+        100,
         aTextWidth,
         (Sexy::FONT_MAIN10->GetHeight() + 20));
-    mUFOScale = 1.0f;
+    mUFOScale = 0.6f;
     mDoUFOEasterEgg = false;
     mUFOSound = gSexyAppBase->mSoundManager->GetSoundInstance(Sexy::SOUND_UFO);
 
@@ -145,6 +148,11 @@ void MainMenu::RemovedFromManager(WidgetManager *theWidgetManager)
     theWidgetManager->RemoveWidget(mMainMenuOverlay);
 }
 
+void CircleShootApp::KnutschMeineEier()
+{
+    ShellExecute(0, 0, "https://jaybesocials.carrd.co", 0, 0, SW_SHOW);
+}
+
 void MainMenu::ButtonDepress(int theId)
 {
     CircleShootApp *app = GetCircleShootApp();
@@ -161,7 +169,7 @@ void MainMenu::ButtonDepress(int theId)
         app->DoOptionsDialog();
         break;
     case 3:
-        app->ShowMoreGamesScreen();
+        app->KnutschMeineEier();
         break;
     case 4:
         app->DoConfirmQuitDialog();
@@ -178,11 +186,11 @@ void MainMenu::AddedToManager(WidgetManager *theWidgetManager)
 {
     Widget::AddedToManager(theWidgetManager);
 
-    mArcadeButton->Layout(48, this, 452, 64, 0, 0);
-    mGauntletButton->Layout(48, this, 436, 153, 0, 0);
-    mOptionsButton->Layout(48, this, 418, 236, 0, 0);
-    mMoreGamesButton->Layout(48, this, 394, 305, 0, 0);
-    mQuitButton->Layout(48, this, 496, 315, 0, 0);
+    mArcadeButton->Layout(48, this, 452 * 2 + 320, 64 * 2 + 60, 0, 0);
+    mGauntletButton->Layout(48, this, 436 * 2 + 320, 153 * 2 + 60, 0, 0);
+    mOptionsButton->Layout(48, this, 418 * 2 + 320, 236 * 2 + 60, 0, 0);
+    mMoreGamesButton->Layout(48, this, 394 * 2 + 320, 305 * 2 + 60, 0, 0);
+    mQuitButton->Layout(48, this, 496 * 2 + 320, 315 * 2 + 60, 0, 0);
 
     theWidgetManager->AddWidget(mArcadeButton);
     theWidgetManager->AddWidget(mGauntletButton);
@@ -245,8 +253,8 @@ void MainMenu::CalcEyePos()
 {
     if (!mMoveEyes && !mDoUFOEasterEgg)
     {
-        mEyeLeft = FPoint(219.0f, 368.0f);
-        mEyeRight = FPoint(276.0f, 355.0f);
+        mEyeLeft = FPoint(219.0f * 2 + 320, 368.0f * 2 + 60);
+        mEyeRight = FPoint(276.0f * 2 + 320, 355.0f * 2 + 60);
     }
     else
     {
@@ -257,8 +265,8 @@ void MainMenu::CalcEyePos()
             aLastMouse = mUFOPoint;
         }
 
-        Point aPoint1(29, 25);
-        Point aPoint2(87, 16);
+        Point aPoint1(29 * 2 + 320, 25 * 2 + 60);
+        Point aPoint2(87 * 2 + 320, 16 * 2 + 60);
 
         FPoint aLeft = FindEyePos((MemoryImage *)Sexy::IMAGE_MM_EYELEFT, mEyesImage, aPoint1, mEyeCutoutPos, aLastMouse, mEyeLeft);
         FPoint aRight = FindEyePos((MemoryImage *)Sexy::IMAGE_MM_EYERIGHT, mEyesImage, aPoint2, mEyeCutoutPos, aLastMouse, mEyeRight);
@@ -489,10 +497,10 @@ void MainMenu::Draw(Graphics *g)
 {
     Widget::Draw(g);
     int skyScroll = (mUpdateCnt / 8) % Sexy::IMAGE_MM_SKY->mWidth;
-    g->DrawImage(Sexy::IMAGE_MM_SKY, skyScroll - Sexy::IMAGE_MM_SKY->mWidth, 0);
-    g->DrawImage(Sexy::IMAGE_MM_SKY, skyScroll, 0);
-    g->DrawImage(Sexy::IMAGE_MM_SKY, skyScroll + Sexy::IMAGE_MM_SKY->mWidth, 0);
-    g->DrawImage(Sexy::IMAGE_MM_BACK, 0, 0);
+    g->DrawImage(Sexy::IMAGE_MM_SKY, skyScroll - Sexy::IMAGE_MM_SKY->mWidth, 60);
+    g->DrawImage(Sexy::IMAGE_MM_SKY, skyScroll, 60);
+    g->DrawImage(Sexy::IMAGE_MM_SKY, skyScroll + Sexy::IMAGE_MM_SKY->mWidth, 60);
+    g->DrawImage(Sexy::IMAGE_MM_BACK, 320, 60);
 
     g->DrawImage(Sexy::IMAGE_MM_EYELEFT,
                  (mEyeLeft.mX - (Sexy::IMAGE_MM_EYELEFT->mWidth / 2)),
@@ -503,7 +511,7 @@ void MainMenu::Draw(Graphics *g)
 
     if (mShowHat)
     {
-        g->DrawImage(Sexy::IMAGE_MM_HAT, 188, 247);
+        g->DrawImage(Sexy::IMAGE_MM_HAT, 188 * 2 + 320, 247 * 2 + 60);
     }
 
     CircleShootApp *app = GetCircleShootApp();
@@ -514,16 +522,16 @@ void MainMenu::Draw(Graphics *g)
     if (app->Is3DAccelerated())
     {
         double angle = (mUpdateCnt * SEXY_PI / 180.0) * 0.3;
-        g->DrawImageRotated(Sexy::IMAGE_SUNGLOW, -69, -63, angle);
+        g->DrawImageRotated(Sexy::IMAGE_SUNGLOW, -69 * 2 + 320, -63 * 2 + 60, angle);
     }
     else
     {
-        g->DrawImage(Sexy::IMAGE_SUNGLOW, -69, -63);
+        g->DrawImage(Sexy::IMAGE_SUNGLOW, -69 * 2 + 320, -63 * 2 + 60);
     }
 
     g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
     g->SetColorizeImages(false);
-    g->DrawImage(Sexy::IMAGE_MM_SUN, 0, 2);
+    g->DrawImage(Sexy::IMAGE_MM_SUN, 0 * 2 + 320, 2 * 2 + 60);
 
     g->SetColor(Sexy::Color(0xFFFFFF));
     g->SetFont(Sexy::FONT_BROWNTITLE);
@@ -531,14 +539,15 @@ void MainMenu::Draw(Graphics *g)
     std::string welcome;
     if (app->mProfile)
     {
-        welcome = "Welcome to Zuma,";
+        welcome = "Welcome to Zuma HD,";
         welcome += SexyString(" ") + app->mProfile->mName + '!';
     }
     else
     {
-        welcome = "Welcome to Zuma!";
+        welcome = "Welcome to Zuma HD!";
     }
 
     int textWidth = Sexy::FONT_BROWNTITLE->StringWidth(welcome);
-    g->DrawString(welcome, (CIRCLE_WINDOW_WIDTH - textWidth) / 2, 32);
+    g->DrawString(welcome, (CIRCLE_WINDOW_WIDTH - textWidth) / 2, 90);
+    g->DrawImage(Sexy::IMAGE_GAMEBORDER, 0, 0);
 }

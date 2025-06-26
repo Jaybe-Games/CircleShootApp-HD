@@ -50,17 +50,17 @@ PracticeScreen::PracticeScreen()
 	mLastClickCnt = 0;
 
 	IntPoint aDoors[12] = {
-		IntPoint(209, 179),
-		IntPoint(232, 129),
-		IntPoint(249, 82),
-		IntPoint(265, 28),
-		IntPoint(0, 0),
-		IntPoint(0, 0),
-		IntPoint(0, 0),
-		IntPoint(0, 0),
-		IntPoint(0, 0),
-		IntPoint(0, 0),
-		IntPoint(0, 0)
+		IntPoint(209 * 2 + 320, 179 * 2 + 60),
+		IntPoint(232 * 2 + 320, 129 * 2 + 60),
+		IntPoint(249 * 2 + 320, 82 * 2 + 60),
+		IntPoint(265 * 2 + 320, 28 * 2 + 60),
+		IntPoint(320, 60),
+		IntPoint(320, 60),
+		IntPoint(320, 60),
+		IntPoint(320, 60),
+		IntPoint(320, 60),
+		IntPoint(320, 60),
+		IntPoint(320, 60)
 	};
 
 	for (int i = 0; i < 4; i++)
@@ -103,12 +103,12 @@ void PracticeScreen::Resize(int x, int y, int theWidth, int theHeight)
 {
 	Widget::Resize(x, y, theWidth, theHeight);
 
-	mBackButton->Resize(x + 177, y + 444, mBackButton->mWidth, mBackButton->mHeight);
-	mGauntPlayButton->Resize(x + 277, y + 444, mGauntPlayButton->mWidth, mGauntPlayButton->mHeight);
-	mNextButton->Resize(x + 390, y + 444, mNextButton->mWidth, mNextButton->mHeight);
-	mMainMenuButton->Resize(x + 10, y + 422, mMainMenuButton->mWidth, mMainMenuButton->mHeight);
-	mSurvivalButton->Resize(x + 506, y + 413, mSurvivalButton->mWidth, mSurvivalButton->mHeight);
-	mPracticeButton->Resize(x + 505, y + 446, mPracticeButton->mWidth, mPracticeButton->mHeight);
+	mBackButton->Resize(x + 177 * 2 + 320, y + 444 * 2 + 60, mBackButton->mWidth, mBackButton->mHeight);
+	mGauntPlayButton->Resize(x + 277 * 2 + 320, y + 444 * 2 + 60, mGauntPlayButton->mWidth, mGauntPlayButton->mHeight);
+	mNextButton->Resize(x + 390 * 2 + 320, y + 444 * 2 + 60, mNextButton->mWidth, mNextButton->mHeight);
+	mMainMenuButton->Resize(x + 10 * 2 + 320, y + 422 * 2 + 60, mMainMenuButton->mWidth, mMainMenuButton->mHeight);
+	mSurvivalButton->Resize(x + 506 * 2 + 320, y + 413 * 2 + 60, mSurvivalButton->mWidth, mSurvivalButton->mHeight);
+	mPracticeButton->Resize(x + 505 * 2 + 320, y + 446 * 2 + 60, mPracticeButton->mWidth, mPracticeButton->mHeight);
 }
 
 void PracticeScreen::AddedToManager(WidgetManager *theWidgetManager)
@@ -187,14 +187,14 @@ void PracticeScreen::Draw(Graphics *g)
 	Widget::Draw(g);
 
 	int aScroll = (mUpdateCnt >> 2) % Sexy::IMAGE_GAUNTSKY->mWidth;
-	g->DrawImage(Sexy::IMAGE_GAUNTSKY, aScroll - Sexy::IMAGE_GAUNTSKY->mWidth, 0);
-	g->DrawImage(Sexy::IMAGE_GAUNTSKY, aScroll, 0);
-	g->DrawImage(Sexy::IMAGE_GAUNTSKY, aScroll + Sexy::IMAGE_GAUNTSKY->mWidth, 0);
+	g->DrawImage(Sexy::IMAGE_GAUNTSKY, aScroll - Sexy::IMAGE_GAUNTSKY->mWidth, 60);
+	g->DrawImage(Sexy::IMAGE_GAUNTSKY, aScroll, 60);
+	g->DrawImage(Sexy::IMAGE_GAUNTSKY, aScroll + Sexy::IMAGE_GAUNTSKY->mWidth, 60);
 
-	g->DrawImage(mThumbnail, 170, 220);
-	g->DrawImage(Sexy::IMAGE_GAUNTSCREEN, 0, 0);
-	g->DrawImage(Sexy::IMAGE_GAUNTTITLE, 0, 0);
-	g->DrawImage(Sexy::IMAGE_GAUNTHIGHSCORE, 434, 0);
+	g->DrawImage(mThumbnail, 170 * 2 + 320, 220 * 2 + 60);
+	g->DrawImage(Sexy::IMAGE_GAUNTSCREEN, 320, 60);
+	g->DrawImage(Sexy::IMAGE_GAUNTTITLE, 320, 60);
+	g->DrawImage(Sexy::IMAGE_GAUNTHIGHSCORE, 430 * 2 + 360, 60);
 
 	for (int i = 0; i < 4; i++)
 	{
@@ -229,19 +229,19 @@ void PracticeScreen::Draw(Graphics *g)
 	std::string aText(mDisplayName);
 	aText[0] = toupper(aText[0]);
 	g->DrawString(aText,
-				  170 + (mThumbnail->mWidth - Sexy::FONT_MAIN10OUTLINE->StringWidth(aText)) / 2,
-				  427);
+				  170 * 2 + 320 + (mThumbnail->mWidth - Sexy::FONT_MAIN10OUTLINE->StringWidth(aText)) / 2,
+				  427 * 2 + 60);
 
 	g->SetColor(Color(0xFFFF00));
 	aText = mIsEndless ? "Survival" : "Practice";
 	g->DrawString(aText,
-				  150 + (mThumbnail->mWidth - Sexy::FONT_MAIN10OUTLINE->StringWidth(aText)),
-				  260);
+				  150 * 2 + 320 + (mThumbnail->mWidth - Sexy::FONT_MAIN10OUTLINE->StringWidth(aText)),
+				  260 * 2 + 60);
 
 	if (mMaxStage > 2)
 	{
-		int aPosX = 560 - Sexy::IMAGE_SUNGLOW->mWidth / 2;
-		int aPosY = 220 - (Sexy::IMAGE_SUNGLOW->mHeight + Sexy::IMAGE_GAUNTSUNGEM->mHeight) / 2;
+		int aPosX = 560 * 2 + 320 - Sexy::IMAGE_SUNGLOW->mWidth / 2;
+		int aPosY = 220 * 2 + 60 - (Sexy::IMAGE_SUNGLOW->mHeight + Sexy::IMAGE_GAUNTSUNGEM->mHeight) / 2;
 
 		g->SetColorizeImages(true);
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
@@ -271,13 +271,13 @@ void PracticeScreen::Draw(Graphics *g)
 	switch (mMaxStage)
 	{
 	case 1:
-		g->DrawImage(Sexy::IMAGE_GAUNTEAGLEGEM, 560 - Sexy::IMAGE_GAUNTEAGLEGEM->mWidth / 2, 220 - Sexy::IMAGE_GAUNTEAGLEGEM->mHeight);
+		g->DrawImage(Sexy::IMAGE_GAUNTEAGLEGEM, 560 * 2 + 320 - Sexy::IMAGE_GAUNTEAGLEGEM->mWidth / 2, 220 * 2 + 60 - Sexy::IMAGE_GAUNTEAGLEGEM->mHeight);
 		break;
 	case 2:
-		g->DrawImage(Sexy::IMAGE_GAUNTJAGUARGEM, 560 - Sexy::IMAGE_GAUNTJAGUARGEM->mWidth / 2, 220 - Sexy::IMAGE_GAUNTJAGUARGEM->mHeight);
+		g->DrawImage(Sexy::IMAGE_GAUNTJAGUARGEM, 560 * 2 + 320 - Sexy::IMAGE_GAUNTJAGUARGEM->mWidth / 2, 220 * 2 + 60 - Sexy::IMAGE_GAUNTJAGUARGEM->mHeight);
 		break;
 	case 3:
-		g->DrawImage(Sexy::IMAGE_GAUNTSUNGEM, 560 - Sexy::IMAGE_GAUNTSUNGEM->mWidth / 2, 220 - Sexy::IMAGE_GAUNTSUNGEM->mHeight);
+		g->DrawImage(Sexy::IMAGE_GAUNTSUNGEM, 560 * 2 + 320 - Sexy::IMAGE_GAUNTSUNGEM->mWidth / 2, 220 * 2 + 60 - Sexy::IMAGE_GAUNTSUNGEM->mHeight);
 		break;
 	default:
 		break;
@@ -294,19 +294,19 @@ void PracticeScreen::Draw(Graphics *g)
 		{
 			g->DrawString(
 				Sexy::StrFormat("%d", anItr->mScore),
-				575,
-				70 + Sexy::FONT_MAIN10OUTLINE->GetLineSpacing() * i);
+				575 * 2 + 320,
+				70 * 2 + 60 + Sexy::FONT_MAIN10OUTLINE->GetLineSpacing() * i);
 		}
 
-		sg.ClipRect(0, 0, 567, 480);
+		sg.ClipRect(320, 60, 567, 480);
 
 		anItr = mScoreSet->begin();
 		for (int i = 0; i != 3 && anItr != mScoreSet->end(); anItr++, i++)
 		{
 			g->DrawString(
 				anItr->mName,
-				445,
-				70 + Sexy::FONT_MAIN10OUTLINE->GetLineSpacing() * i);
+				445 * 2 + 320,
+				70 * 2 + 60 + Sexy::FONT_MAIN10OUTLINE->GetLineSpacing() * i);
 		}
 	}
 
@@ -332,7 +332,9 @@ void PracticeScreen::Draw(Graphics *g)
 	}
 
 	Widget::WriteWordWrapped(g, Rect(20, 60, 150, 100), aDescription, 14, -1);
+	g->DrawImage(IMAGE_MM_GAMEBORDER, 0, 0);
 }
+
 
 void PracticeScreen::KeyChar(char theChar)
 {
@@ -418,7 +420,7 @@ void PracticeScreen::SyncModeButtons() {
 MemoryImage *PracticeScreen::CreateGradientImage(std::string const &theName, int theAlpha)
 {
 	MemoryImage *anImage = new MemoryImage(gSexyAppBase);
-	anImage->Create(320, 240);
+	anImage->Create(640, 480);
 
 	Graphics g(anImage);
 	int aHalfHeight = anImage->mHeight / 2;
@@ -574,10 +576,10 @@ void PracticeScreen::LoadBoard()
 	if (mThumbnail == NULL)
 	{
 		mThumbnail = new MemoryImage(gSexyAppBase);
-		mThumbnail->Create(320, 240);
+		mThumbnail->Create(320 * 2, 240 * 2);
 		Graphics g(mThumbnail);
 		g.SetColor(Color(0));
-		g.FillRect(0, 0, 320, 240);
+		g.FillRect(0, 0, 640, 480);
 	}
 
 	mLocked = !aUnlocked;

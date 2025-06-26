@@ -465,7 +465,7 @@ Graphics *CurveDrawer::GetGraphics(int thePriority)
         return mForeG[thePriority];
 
     mForeImage[thePriority] = new MemoryImage(gSexyAppBase);
-    mForeImage[thePriority]->Create(640, 480);
+    mForeImage[thePriority]->Create(1920, 1080);
     mForeG[thePriority] = new Graphics(mForeImage[thePriority]);
 
     return mForeG[thePriority];

@@ -37,7 +37,7 @@ using namespace Sexy;
 
 CircleShootApp::CircleShootApp()
 {
-    mTitle = "Zuma Deluxe " + mProductVersion;
+    mTitle = "Sexy Zuma Deluxe HD 1.0";
     mRegKey = "PopCap\\Zuma";
 
     mAutoEnable3D = true;
@@ -361,15 +361,7 @@ void CircleShootApp::ShowLoadingScreen()
 
 void CircleShootApp::ShowHelpScreen()
 {
-    mHelpScreen = new HelpScreen();
-    mHelpScreen->Resize(0, 0, mWidth, mHeight);
-    mWidgetManager->AddWidget(mHelpScreen);
-    mWidgetManager->SetFocus(mHelpScreen);
-    if (mBoard)
-    {
-        mBoard->Pause(true, true);
-    }
-    ClearUpdateBacklog();
+
 }
 
 void CircleShootApp::StartAdventureGame(int theStage)
@@ -383,10 +375,6 @@ void CircleShootApp::StartAdventureGame(int theStage)
         MakeBoard();
         mBoard->SetStartLevel(mLevelParser->GetLevelNumByStage(theStage));
         mBoard->Reset(true);
-        if (mProfile->mShowHelpScreen)
-        {
-            ShowHelpScreen();
-        }
 
         PlaySong(0, 1, 0.01);
     }
@@ -399,10 +387,7 @@ void CircleShootApp::StartPracticeGame(const std::string &theLevelName, int theS
     mBoard->SetStartLevel(theStartLevel);
     mBoard->SetIsEndless(endless);
     mBoard->Reset(true);
-    if (mProfile->mShowHelpScreen)
-    {
-        ShowHelpScreen();
-    }
+
 
     PlaySong(0, true, 0.01);
 }
@@ -456,14 +441,7 @@ void CircleShootApp::StartSavedGame(bool showConfirm)
     mSaveGameBuffer.Clear();
     if (!showConfirm)
     {
-        if (mProfile->mShowHelpScreen)
-        {
-            ShowHelpScreen();
-        }
-        else
-        {
-            DoGetReadyDialog();
-        }
+        DoGetReadyDialog();
     }
     PlaySong(0, true, 0.01);
 }
@@ -1249,6 +1227,7 @@ void CircleShootApp::ShowCreditsScreen(bool happyEnd)
 
 void CircleShootApp::ShowMoreGamesScreen()
 {
+
 }
 
 void CircleShootApp::EndHelpScreen()

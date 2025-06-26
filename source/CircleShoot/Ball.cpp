@@ -9,6 +9,7 @@
 #include "BlendedImage.h"
 #include "DataSync.h"
 #include "Res.h"
+#include <iostream>
 
 #include <math.h>
 
@@ -37,6 +38,10 @@ BlendedImage *CreateBlendedBall(int theType)
     if (gBlendedBalls[theType] == NULL)
     {
         Image *image = Sexy::GetImageById((ResourceId)(theType + Sexy::IMAGE_BLUE_BALL_ID));
+        if (image == NULL) {
+            // Log an error or print a message
+            std::cerr << "Error: Ball image not loaded for type " << theType << std::endl;
+        }
         int aCelHeight = image->mHeight / image->mNumRows;
         Rect aRect(0, aCelHeight * (image->mNumRows / 2), image->mWidth, aCelHeight);
 
@@ -349,19 +354,20 @@ void Ball::StartClearCount(bool inTunnel)
 
         for (int i = 0; i < 60; i++)
         {
-            Particle &ptcl = mParticles[i];
+            Particle& ptcl = mParticles[i];
             float angle = (float)(Sexy::AppRand() % 360) * SEXY_PI / 180.0f;
             float speed = (float)(Sexy::AppRand() % 500) / 500.0f;
             ptcl.vx = sinf(angle) * speed;
             ptcl.vy = cosf(angle) * speed;
 
             int rnd = Sexy::AppRand() % 30;
-            ptcl.x = rnd * ptcl.vx + mx;
-            ptcl.y = rnd * ptcl.vy + my;
-            ptcl.mSize = (int)(Sexy::AppRand() % 10 < 2) + 1;
+            ptcl.x = rnd * ptcl.vx * 2.0f + mx * 2.0f; // Scale position
+            ptcl.y = rnd * ptcl.vy * 2.0f + my * 2.0f; // Scale position
+            ptcl.mSize = (int)(Sexy::AppRand() % 10 < 2) + 1 * 2; // Scale size
         }
     }
 }
+
 
 void Ball::SetClearCount(int theCount)
 {
@@ -381,7 +387,7 @@ void Ball::DrawShadow(Graphics *g)
     if (mClearCount == 0)
     {
         g->DrawImageF(Sexy::IMAGE_BALL_SHADOW,
-                      (mx - Sexy::IMAGE_BALL_SHADOW->mWidth / 2) - 3.0f,
+                      (mx - Sexy::IMAGE_BALL_SHADOW->mWidth / 2) - 3.0f -10,
                       (my - Sexy::IMAGE_BALL_SHADOW->mHeight / 2) + 5.0f);
     }
 }
@@ -392,7 +398,7 @@ bool Ball::CollidesWithPhysically(Ball *theBall, int thePad)
     float dy = theBall->GetY() - this->GetY();
     float r = (float)theBall->GetRadius() + thePad;
 
-    return dx * dx + dy * dy < r * (r * 4.0f);
+    return dx * dx + dy * dy < r * (r * 4.0f) * 2.2;
 }
 
 bool Ball::CollidesWith(Ball *theBall, int thePad)
@@ -425,7 +431,7 @@ void Ball::SetBullet(Bullet *theBullet)
     mBullet = theBullet;
 }
 
-void Ball::Draw(Graphics *g)
+void Ball::Draw(Graphics* g)
 {
     if (mClearCount != 0)
     {
@@ -450,6 +456,8 @@ void Ball::Draw(Graphics *g)
     g->SetColorizeImages(false);
     g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
 }
+
+
 
 void Ball::SetCollidesWithPrev(bool collidesWithPrev)
 {
@@ -730,13 +738,14 @@ void Ball::DrawExplosion(Graphics *g)
     }
 }
 
-void Ball::DoDraw(Graphics *g)
+void Ball::DoDraw(Graphics* g)
 {
+
     if (mPowerType == PowerType_None)
     {
-        Image *image = Sexy::GetImageById((ResourceId)(mType + Sexy::IMAGE_BLUE_BALL_ID));
-        float aBallX = mx - 16.0f;
-        float aBallY = my - 16.0f;
+        Image* image = Sexy::GetImageById((ResourceId)(mType + Sexy::IMAGE_BLUE_BALL_ID));
+        float aBallX = (mx - 16.0f - 16.0f);
+        float aBallY = (my - 16.0f - 10.0f);
         int aFrame = (mStartFrame + (int)mWayPoint) % image->mNumRows;
 
         if (gSexyAppBase->Is3DAccelerated())
@@ -747,7 +756,7 @@ void Ball::DoDraw(Graphics *g)
         }
         else
         {
-            BlendedImage *aBlendedBall = CreateBlendedBall(mType);
+            BlendedImage* aBlendedBall = CreateBlendedBall(mType);
             aBlendedBall->Draw(g, aBallX, aBallY);
         }
     }
@@ -756,3 +765,4 @@ void Ball::DoDraw(Graphics *g)
         DrawPower(g);
     }
 }
+
