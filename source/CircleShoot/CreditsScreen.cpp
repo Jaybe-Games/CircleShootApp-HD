@@ -56,7 +56,7 @@ void CreditsScreen::Draw(Graphics *g)
 	Widget::Draw(g);
 	if (mBackgroundImage != NULL)
 	{
-		g->DrawImage(mBackgroundImage, 355 * 2 + 320, 90 * 2 + 60);
+		g->DrawImage(mBackgroundImage, 320, 60);
 		
 	}
 	else
@@ -150,7 +150,7 @@ void CreditsScreen::Draw(Graphics *g)
 		int aAlpha = 255 - 255 * mUpdateCnt / 25;
 		g->SetDrawMode(Graphics::DRAWMODE_ADDITIVE);
 		g->SetColor(Color(aAlpha, aAlpha, aAlpha));
-		g->FillRect(0, 0, CIRCLE_WINDOW_WIDTH, CIRCLE_WINDOW_HEIGHT);
+		g->FillRect(320, 60, CIRCLE_WINDOW_WIDTH, CIRCLE_WINDOW_HEIGHT);
 		g->SetDrawMode(Graphics::DRAWMODE_NORMAL);
 	}
 	g->DrawImage(IMAGE_GAMEBORDER, 0, 0);
